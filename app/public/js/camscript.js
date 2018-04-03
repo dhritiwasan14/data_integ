@@ -1,4 +1,3 @@
-var xhttp = new XMLHttpRequest();
 
 window.onload = () => {
     let video = document.getElementById('camdemo');
@@ -25,21 +24,15 @@ window.onload = () => {
           let reader = new FileReader();
           reader.onloadend = (event) => {
             // TODO: send the information back to the server to verify face
-            alert(reader.result.substr(0, 100));
+            console.log(reader.result.substr(0, 100));
             // request.open("POST", "face", true);
             // request.setRequestHeader("Content-type", "text/plain");
 
-            // // request.setRequestHeader("Content-Transfer-Encoding", "base64");
-            // console.log(reader.result);
-            // request.send('image=hello');
-            console.log(typeof blob);
-            console.log(reader.result);
+            let xhttp = new XMLHttpRequest();
             xhttp.open("POST", "face", true);
             xhttp.setRequestHeader("Content-type", "text/plain;charset=utf8");
-            xhttp.setRequestHeader("Content-Transfer-Encoding", "base64");
             xhttp.send(reader.result);
             console.log("request has worked");
-
           };
           reader.readAsDataURL(blob);
           
