@@ -50,13 +50,27 @@ cloudant.auth(username, password, function (err, body, headers) {
     }
 });
 
+function requireLogin(req, res, next) {
+    if (req.session && req.session.user) {
+        db.get(req.session.user, function(err, body, header) {
+            console.log(err);
+            if (err) {
+                res.redirect('/');
+            } else {
+                res.locals.user = body;
+                next();
+            }
+        });
+    } else {
+        res.redirect('/');
+    }
+}
 
 router.get('/', function(req, res) {
-    req.session.user = 'this is a test';
     return res.render('index');
 });
 
-router.get('/face', function(req, res) {
+router.get('/face', requireLogin, function(req, res) {
     return res.render('face');
 })
 
@@ -81,6 +95,7 @@ router.post('/', function(req, res) {
                 if (authenticator.verifyToken(body.qrkey, formattedToken)!= null) {
                     // { delta: 0 }
                     console.log("token submitted is correct");
+                    req.session.user = req.body.username;
                     return res.redirect('/profile');
                 }
                 else {

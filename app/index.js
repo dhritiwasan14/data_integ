@@ -24,12 +24,6 @@ app.use(session({
     unset: 'destroy'
 }));
 
-app.use(function(req, res, next) {
-    let db = database.getDatabase();
-    
-    next();
-})
-
 // Final routes to go here after configuration otherwise config would not be captured
 app.use('/', routes);
 
