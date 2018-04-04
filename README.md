@@ -13,7 +13,6 @@ These instructions will get you a copy of the project up and running on your loc
 ```
 $ git clone https://github.com/dhritiwasan14/data_integ
 ```
-* Setup [mongod](https://treehouse.github.io/installation-guides/mac/mongo-mac.html)
 * Install nodejs and npm on your terminal - refer to installation for help
 
 ### Installation
