@@ -7,7 +7,7 @@ var QRCode = require('qr-image');
 var bodyParser = require('body-parser');
 var face_rec2 = require('./face-rec.js');
 // var hello_world = require('./hello.js');
-const saltRounds = 10;
+
 const fr = require('face-recognition');
 const path = require('path');
 const fs = require('fs');
@@ -84,14 +84,14 @@ router.get('/', function(req, res) {
     return res.render('index'); 
 });
 
-router.get('/face', requireLogin, function(req, res) {
+router.get('/face', function(req, res) {
     return res.render('face');
 })
 
 router.post('/face', function(req, res) {
     console.log('starting training');
     var modelState = face_rec2.trainSingle('name', req.body);
-    console.log(modelState);
+    
     
 })
 

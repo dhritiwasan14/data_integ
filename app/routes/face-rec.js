@@ -2,7 +2,7 @@
 const path = require('path');
 const fs = require('fs');
 const mainPath = 'images';
-const cv = require('opencv.js');
+const cv = require('opencv4nodejs');
 const fr = require('face-recognition').withCv(cv);
 const recognizer = fr.FaceRecognizer();
 const detector = fr.FaceDetector();
@@ -11,6 +11,7 @@ const detector = fr.FaceDetector();
 function trainNew() {
     const numJitters = 15;
     loadModel();
+    try {
     fs.readdir(mainPath, function (err, files) {
         if (err) {
             console.error("Could not list the directory", err);
@@ -37,9 +38,14 @@ function trainNew() {
                 recognizer.addFaces(holder, name, numJitters);
                 const modelState = recognizer.serialize();
                 fs.writeFileSync('model.json', JSON.stringify(modelState));
+                console.log('finished adding');
             });
         });
+
     });
+    } catch (err) {
+        console.log(err);
+    } 
 }
 
 function loadModel() {
@@ -83,7 +89,7 @@ function trainSingle(singleName, image) {
     try {
         var cvImage = loadBase64(image);
         console.log(cvImage);
-        faceImage = detector.detectFaces(cvImage, 1);
+        faceImage = detector.detectFaces(cvImage, 200);
         console.log(typeof faceImage);
         if (faceImage.length === 0) {
             flag = true;
@@ -93,11 +99,11 @@ function trainSingle(singleName, image) {
         console.log('Analyzing');
         set.push(... faceImage);
         console.log('Training for ' + singleName);
-        recognizer.addFaces(faceImage, [0], numJitters);
+        recognizer.addFaces(faceImage, singleName, numJitters);
         console.log("finished adding faces");
         const modelState = recognizer.serialize();
         fs.writeFileSync(singleName + '.json', JSON.stringify(modelState));
-        
+        console.log("finished adding faces");
         return JSON.stringify(modelState);
     } catch (err) {
         console.log(err);
