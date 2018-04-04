@@ -51,6 +51,7 @@ cloudant.auth(username, password, function (err, body, headers) {
 });
 
 function requireLogin(req, res, next) {
+    console.log(req.session.user);
     if (req.session && req.session.user) {
         db.get(req.session.user, function(err, body, header) {
             console.log(err);
@@ -74,7 +75,7 @@ router.get('/face', requireLogin, function(req, res) {
     return res.render('face');
 })
 
-router.post('/face', function(req, res) {
+router.post('/face', requireLogin, function(req, res) {
     console.log(req.body);
 })
 
@@ -117,12 +118,12 @@ router.get('/signup', function(req, res) {
 });
 
 
-router.get('/login', function(req, res) {
+router.get('/login', requireLogin, function(req, res) {
     return res.render('face');
 });
 
 
-router.get('/profile', function(req, res) {
+router.get('/profile', requireLogin, function(req, res) {
     return res.render('profile');
 });
 
@@ -161,15 +162,17 @@ router.post('/signup', function(req, res) {
 });
 
 
-router.get('/logout', function(req, res) {
-    return res.render('index');
+router.get('/logout', requireLogin, function(req, res) {
+    req.session.regenerate((err) => {
+        res.render('index');
+    })
 });
 
-router.get('/fv', function(req, res) {
+router.get('/fv', requireLogin, function(req, res) {
     res.render('fv');
 });
 
-router.post('/receivedImage', function(req, res) {
+router.post('/receivedImage', requireLogin, function(req, res) {
     // TODO: use the request to check whether the face data matches
     let match = true;
     if (match) {
@@ -181,11 +184,11 @@ router.post('/receivedImage', function(req, res) {
     }
 })
 
-router.get('/submit', function(req, res) {
+router.get('/submit', requireLogin, function(req, res) {
     res.render('submit');
 })
 
-router.post('/documents', function(req, res) {
+router.post('/documents', requireLogin, function(req, res) {
     // TODO: store the image into the database
     console.log(req.body);
 })
