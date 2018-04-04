@@ -187,6 +187,31 @@ router.get('/logout', function(req, res) {
     return res.render('index');
 });
 
+router.get('/fv', function(req, res) {
+    res.render('fv');
+});
+
+router.post('/receivedImage', function(req, res) {
+    // TODO: use the request to check whether the face data matches
+    let match = true;
+    if (match) {
+        res.status(200);
+        res.send({ redirect: 'submit'})
+    } else {
+        res.status(202);
+        res.send("Authentication Failed");
+    }
+})
+
+router.get('/submit', function(req, res) {
+    res.render('submit');
+})
+
+router.post('/documents', function(req, res) {
+    // TODO: store the image into the database
+    console.log(req.body);
+})
+
 function checkDatabase(username) {
     
 }

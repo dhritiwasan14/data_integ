@@ -3,46 +3,39 @@ window.onload = () => {
     let video = document.getElementById('camdemo');
     let verifyBtn = document.getElementById('verify');
     let imageCapture;
-  
+    
     navigator.mediaDevices.getUserMedia({ video: true, audio: false, fps: 15 })
-      .then(function(stream) {
+    .then(function(stream) {
         video.srcObject = stream;
         video.play();
         let vs = stream.getVideoTracks()[0];
         imageCapture = new ImageCapture(vs);
-  
+        
         verifyBtn.onclick = verify;
-      })
-      .catch(function(err) {
+    })
+    .catch(function(err) {
         console.log(err);
         alert('Failed to access webcam.');
-      })
-  
+    })
+    
     function verify(event) {
-      imageCapture.takePhoto()
+        imageCapture.takePhoto()
         .then(blob => {
-          let reader = new FileReader();
-          reader.onloadend = (event) => {
-            // TODO: send the information back to the server to verify face
-            console.log(reader.result.substr(0, 100));
-            // request.open("POST", "face", true);
-            // request.setRequestHeader("Content-type", "text/plain");
-
-            let xhttp = new XMLHttpRequest();
-            xhttp.open("POST", "face", true);
-            xhttp.setRequestHeader("Content-type", "text/plain;charset=utf8");
-            xhttp.send(reader.result);
-            console.log("request has worked");
-          };
-          reader.readAsDataURL(blob);
-          
-        //   window.location.href = '/submitdoc.html';
+            let reader = new FileReader();
+            reader.onloadend = (event) => {
+                let xhttp = new XMLHttpRequest();
+                xhttp.open("POST", "face", true);
+                xhttp.setRequestHeader("Content-type", "text/plain;charset=utf8");
+                xhttp.send(reader.result);
+            };
+            reader.readAsDataURL(blob);
+            
         })
         .catch(err => {
-          console.log(err);
+            console.log(err);
         });
     }
-  }
+}
 // document.getElementById("savefile").addEventListener('click', function () {
 //     if (enabled) {
 //         WebCamera.snap(function (data_uri) {
