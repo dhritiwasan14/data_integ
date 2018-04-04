@@ -102,7 +102,7 @@ function trainSingle(singleName, image) {
         recognizer.addFaces(faceImage, singleName, numJitters);
         console.log("finished adding faces");
         const modelState = recognizer.serialize();
-        fs.writeFileSync(singleName + '.json', JSON.stringify(modelState));
+        fs.writeFileSync(__dirname + '/model.json', JSON.stringify(modelState));
         console.log("finished adding faces");
         return JSON.stringify(modelState);
     } catch (err) {
@@ -110,8 +110,8 @@ function trainSingle(singleName, image) {
     } 
 }
 
-function predictIndividual(image,modelPath) {
-    const modelState = fs.readFileSync(modelPath);
+function predictIndividual(image) {
+    const modelState = fs.readFileSync(__dirname + "/model.json");
     const values = JSON.parse(modelState);
     recognizer.load(values)
     const load = fr.loadImage(image);

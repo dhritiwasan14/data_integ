@@ -2,6 +2,7 @@
 window.onload = () => {
     let video = document.getElementById('camdemo');
     let verifyBtn = document.getElementById('verify');
+    let submitBtn = document.getElementById('submit');
     let imageCapture;
     
     navigator.mediaDevices.getUserMedia({ video: true, audio: false, fps: 15 })
@@ -12,13 +13,14 @@ window.onload = () => {
         imageCapture = new ImageCapture(vs);
         
         verifyBtn.onclick = verify;
+        submitBtn.onclick = submit;
     })
     .catch(function(err) {
         console.log(err);
         alert('Failed to access webcam.');
     })
     
-    function verify(event) {
+    function submit(event) {
         imageCapture.takePhoto()
         .then(blob => {
             let reader = new FileReader();
