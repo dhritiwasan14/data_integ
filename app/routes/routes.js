@@ -71,7 +71,6 @@ function requireLogin(req, res, next) {
             if (err) {
                 res.redirect('/');
             } else {
-                res.locals.user = body;
                 next();
             }
         });
@@ -89,16 +88,11 @@ router.get('/face', function(req, res) {
     return res.render('face');
 })
 
-<<<<<<< HEAD
-router.post('/face', requireLogin, function(req, res) {
-    console.log(req.body);
-=======
 router.post('/face', function(req, res) {
     console.log('starting training');
     var modelState = face_rec2.trainSingle('name', req.body);
     
     
->>>>>>> ddcea437d40c2bb0742e89628145845db46e16f7
 })
 
 router.post('/', function(req, res) {
@@ -195,13 +189,8 @@ router.get('/logout', requireLogin, function(req, res) {
     })
 });
 
-<<<<<<< HEAD
 router.get('/fv', requireLogin, function(req, res) {
     res.render('fv');
-=======
-router.get('/fv', function(req, res) {
-    return res.render('fv');
->>>>>>> ddcea437d40c2bb0742e89628145845db46e16f7
 });
 
 router.post('/receivedImage', requireLogin, function(req, res) {
