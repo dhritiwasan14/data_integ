@@ -1,10 +1,12 @@
-const fr = require('face-recognition');
+
 const path = require('path');
 const fs = require('fs');
 const mainPath = 'images';
-
+const cv = require('opencv.js');
+const fr = require('face-recognition').withCv(cv);
 const recognizer = fr.FaceRecognizer();
 const detector = fr.FaceDetector();
+// const classifier = new cv.CascadeClassifier(cv.HAAR_FRONTALFACE_ALT2);
 
 function trainNew() {
     const numJitters = 15;
@@ -41,41 +43,65 @@ function trainNew() {
 }
 
 function loadModel() {
-    const modelState = fs.readFileSync('model.json');
+    console.log('trying to load model');
+    
+    
+    const modelState = fs.readFileSync(__dirname+'/model.json');
+    
+
+    console.log('have not failed miserably');
+    try {
     const values = JSON.parse(modelState);
     recognizer.load(values);
+    } catch (err) {
+        console.log(err);
+    }
+    
+    console.log('loaded model');
 }
 
-function trainSingle(singleName) {
+function loadBase64(base64encoded){
+    console.log('error has occurred');
+    console.log(base64encoded.substring(0, 100));
+    const base64data = base64encoded.replace('data:image/jpeg;base64','')
+                                    .replace('data:image/png;base64','');
+    const buffer = Buffer.from(base64data, 'base64');
+    const image = cv.imdecode(buffer);
+    console.log(image);
+    const cvImage = fr.CvImage(image);
+    
+    console.log('error has not occurred');
+    return fr.cvImageToImageRGB(cvImage);
+}
+
+function trainSingle(singleName, image) {
+    console.log('starting training');
     const numJitters = 15;
     var set = [];
-    //loadModel();
+    loadModel();
     var faceImage;
-    fs.readdir("train", function (err, files) {
-        var flag = false;
-        files.forEach(function (image, innerIndex) {
-            if (flag) { return; }
-            var trainFile = path.join("train", image);
-            const targetSize = 200;
-            console.log(trainFile);
-            faceImage = detector.detectFaces(fr.loadImage(trainFile), targetSize);
-            if (faceImage.length === 0) {
-                flag = true;
-                return;
-            }
-            console.log('Analyzing ' + image);
-            set.push(...faceImage);
-        });
-        console.log('Training for ' + singleName);
-        try {
-            recognizer.addFaces(set, singleName, numJitters);
-            const modelState = recognizer.serialize();
-            fs.writeFileSync(singleName + '.json', JSON.stringify(modelState));
-        } catch (err) {
-            dialog.showMessageBox({ title: "Error", message: "No face detected, ensure you are looking at the camera", buttons: ['OK'] });
+    try {
+        var cvImage = loadBase64(image);
+        console.log(cvImage);
+        faceImage = detector.detectFaces(cvImage, 1);
+        console.log(typeof faceImage);
+        if (faceImage.length === 0) {
+            flag = true;
+            return;
         }
-    });
-    return faceImage;
+        
+        console.log('Analyzing');
+        set.push(... faceImage);
+        console.log('Training for ' + singleName);
+        recognizer.addFaces(faceImage, [0], numJitters);
+        console.log("finished adding faces");
+        const modelState = recognizer.serialize();
+        fs.writeFileSync(singleName + '.json', JSON.stringify(modelState));
+        
+        return JSON.stringify(modelState);
+    } catch (err) {
+        console.log(err);
+    } 
 }
 
 function predictIndividual(image,modelPath) {
@@ -83,8 +109,8 @@ function predictIndividual(image,modelPath) {
     const values = JSON.parse(modelState);
     recognizer.load(values)
     const load = fr.loadImage(image);
-    const targetSize = 200;
-    var detectedFace = detector.detectFaces(load, targetSize);
+    
+    var detectedFace = detector.detectFaces(load, 200);
     if (detectedFace.length < 1) {
         console.log('No face detected');
     } else {
@@ -104,8 +130,8 @@ function predictIndividual(image,modelPath) {
 function predict(image) {
     loadModel();
     const load = fr.loadImage(image);
-    const targetSize = 200;
-    var detectedFace = detector.detectFaces(load, targetSize);
+    
+    var detectedFace = detector.detectFaces(load, 200);
     if (detectedFace.length < 1) {
         console.log('No face detected');
     } else {
@@ -121,3 +147,5 @@ function predict(image) {
     }
 
 }
+
+module.exports = {predictIndividual, predict, trainSingle, loadBase64, loadModel, trainNew, fs, fr, recognizer, detector, cv};

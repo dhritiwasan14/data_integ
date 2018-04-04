@@ -2,11 +2,19 @@ var express = require('express');
 var router = express.Router();
 var bcrypt = require('bcrypt');
 var authenticator = require('authenticator');
-var cookieParser = require('cookie-parser');
+var cookieSession = require('cookie-session');
 var QRCode = require('qr-image');
 var bodyParser = require('body-parser');
-
+var face_rec2 = require('./face-rec.js');
+// var hello_world = require('./hello.js');
 const saltRounds = 10;
+const fr = require('face-recognition');
+const path = require('path');
+const fs = require('fs');
+const mainPath = 'images';
+
+const recognizer = fr.FaceRecognizer();
+const detector = fr.FaceDetector();
 require('dotenv').load();
 
 var username = process.env.cloudant_username || "nodejs";
@@ -22,40 +30,6 @@ var account = nano(url);
 var cloudant = nano("https://"+username+".cloudant.com");
 var db = account.use('user_details');
 
-// var enabled = true; // A flag to know when start or stop the camera
-// var WebCamera = require("webcamjs"); // Use require to add webcamjs
-// WebCamera.attach('camdemo');
-// // document.getElementById("start").addEventListener('click', function () {
-// //     if (!enabled) { // Start the camera !
-// //         enabled = true;
-// //         WebCamera.attach('camdemo');
-// //         console.log("The camera has been started");
-// //     } else { // Disable the camera !
-// //         enabled = false;
-// //         WebCamera.reset();
-// //         console.log("The camera has been disabled");
-// //     }
-// // }, false);
-
-// // var app = require('electron').remote; 
-// // var dialog = app.dialog;
-
-// var fs = require('fs'); // Load the File System to execute our common tasks (CRUD)
-
-// // return an object with the processed base64image
-// function processBase64Image(dataString) {
-//     var response = ''
-//     var matches = dataString.match(/^data:([A-Za-z-+\/]+);base64,(.+)$/), response = {};
-
-//     if (matches.length !== 3) {
-//         return new Error('Invalid input string');
-//     }
-
-//     response.type = matches[1];
-//     response.data = new Buffer(matches[2], 'base64');
-
-//     return response;
-// }
 
 account.request(function (err, body) {
     if (!err) {
@@ -64,7 +38,6 @@ account.request(function (err, body) {
 });
 
   
-
 cloudant.auth(username, password, function (err, body, headers) {
     if (!err) {
         cookies[username] = headers['set-cookie'];
@@ -90,7 +63,7 @@ cloudant.auth(username, password, function (err, body, headers) {
 
 router.get('/', function(req, res) {
 
-    return res.render('index');
+    return res.render('index'); 
 });
 
 router.get('/face', function(req, res) {
@@ -98,7 +71,10 @@ router.get('/face', function(req, res) {
 })
 
 router.post('/face', function(req, res) {
-    console.log(req.body);
+    console.log('starting training');
+    var modelState = face_rec2.trainSingle('name', req.body);
+    console.log(modelState);
+    
 })
 
 router.post('/', function(req, res) {
@@ -164,6 +140,11 @@ router.post('/signup', function(req, res) {
         // must check if database contains entry
         db.get(req.body.username, function(err, body, headers)  {
             if (err) {
+                app.use(cookieSession({
+                    name: 'session',
+                    keys: [req.body.username],
+                    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+                }));
                 db.insert({"username": req.body.username, "password": hash, "qrkey":formattedKey}, req.body.username, function (err, body, headers) {
                     console.log("trying to add user info");
                     if (!err) {
@@ -188,7 +169,7 @@ router.get('/logout', function(req, res) {
 });
 
 router.get('/fv', function(req, res) {
-    res.render('fv');
+    return res.render('fv');
 });
 
 router.post('/receivedImage', function(req, res) {
@@ -212,7 +193,4 @@ router.post('/documents', function(req, res) {
     console.log(req.body);
 })
 
-function checkDatabase(username) {
-    
-}
 module.exports = router;
