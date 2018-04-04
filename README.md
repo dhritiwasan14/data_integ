@@ -1,5 +1,5 @@
 # KYC IBM
-![alt text](https://github.com/dhritiwasan14/data_integ/damocles.png)
+![alt text](damocles.png)
 A 50.003, IBM proposed project to implement a form of Know-your-customer(KYC). 
 A Web application to allow company to verify the identification of a person with confidence.
 
