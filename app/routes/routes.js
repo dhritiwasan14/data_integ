@@ -2,8 +2,19 @@ var express = require('express');
 var router = express.Router();
 var bcrypt = require('bcrypt');
 var authenticator = require('authenticator');
-var cookieParser = require('cookie-parser');
+var cookieSession = require('cookie-session');
 var QRCode = require('qr-image');
+var bodyParser = require('body-parser');
+var face_rec2 = require('./face-rec.js');
+// var hello_world = require('./hello.js');
+
+const fr = require('face-recognition');
+const path = require('path');
+const fs = require('fs');
+const mainPath = 'images';
+
+const recognizer = fr.FaceRecognizer();
+const detector = fr.FaceDetector();
 
 const saltRounds = 10;
 
@@ -20,12 +31,14 @@ var account = nano(url);
 var cloudant = nano("https://"+username+".cloudant.com");
 var db = account.use('user_details');
 
+
 account.request(function (err, body) {
     if (!err) {
         console.log(body);
     }
 });
 
+  
 
 
 cloudant.auth(username, password, function (err, body, headers) {
@@ -68,15 +81,24 @@ function requireLogin(req, res, next) {
 }
 
 router.get('/', function(req, res) {
-    return res.render('index');
+
+    return res.render('index'); 
 });
 
-router.get('/face', requireLogin, function(req, res) {
+router.get('/face', function(req, res) {
     return res.render('face');
 })
 
+<<<<<<< HEAD
 router.post('/face', requireLogin, function(req, res) {
     console.log(req.body);
+=======
+router.post('/face', function(req, res) {
+    console.log('starting training');
+    var modelState = face_rec2.trainSingle('name', req.body);
+    
+    
+>>>>>>> ddcea437d40c2bb0742e89628145845db46e16f7
 })
 
 router.post('/', function(req, res) {
@@ -143,7 +165,12 @@ router.post('/signup', function(req, res) {
         // must check if database contains entry
         db.get(req.body.username, function(err, body, headers)  {
             if (err) {
-                db.insert({"username": req.body.username, "password": hash, "qrkey":formattedKey, "salt":genSalt}, req.body.username, function (err, body, headers) {
+                app.use(cookieSession({
+                    name: 'session',
+                    keys: [req.body.username],
+                    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+                }));
+                db.insert({"username": req.body.username, "password": hash, "qrkey":formattedKey}, req.body.username, function (err, body, headers) {
                     console.log("trying to add user info");
                     if (!err) {
                         return res.render('setup-2fa', {
@@ -168,8 +195,13 @@ router.get('/logout', requireLogin, function(req, res) {
     })
 });
 
+<<<<<<< HEAD
 router.get('/fv', requireLogin, function(req, res) {
     res.render('fv');
+=======
+router.get('/fv', function(req, res) {
+    return res.render('fv');
+>>>>>>> ddcea437d40c2bb0742e89628145845db46e16f7
 });
 
 router.post('/receivedImage', requireLogin, function(req, res) {
