@@ -2,66 +2,20 @@ var express = require('express');
 var router = express.Router();
 var bcrypt = require('bcrypt');
 var authenticator = require('authenticator');
-var cookieSession = require('cookie-session');
 var QRCode = require('qr-image');
 var bodyParser = require('body-parser');
 var face_rec2 = require('./face-rec.js');
-// var hello_world = require('./hello.js');
+var db = require('../server/db')
 
 const fr = require('face-recognition');
 const path = require('path');
 const fs = require('fs');
 const mainPath = 'images';
 
-const recognizer = fr.FaceRecognizer();
-const detector = fr.FaceDetector();
+/* const recognizer = fr.FaceRecognizer();
+const detector = fr.FaceDetector(); */
 
 const saltRounds = 10;
-
-require('dotenv').load();
-
-var username = process.env.cloudant_username || "nodejs";
-var password = process.env.cloudant_password;
-
-var url = 'https://58dce9f5-340c-4123-93a2-19fb379d26a7-bluemix:0a5c5e9b39efbd7f725d6d9f758385f6237578d58479e793b73de7822df0d1e5@58dce9f5-340c-4123-93a2-19fb379d26a7-bluemix.cloudant.com';
-// var url = "https://"+username+":"+password+"@"+username+".cloudant.com"
-
-var nano = require('nano');
-var account = nano(url);
-var cloudant = nano("https://"+username+".cloudant.com");
-var db = account.use('user_details');
-
-
-account.request(function (err, body) {
-    if (!err) {
-        console.log(body);
-    }
-});
-
-  
-
-
-cloudant.auth(username, password, function (err, body, headers) {
-    if (!err) {
-        cookies[username] = headers['set-cookie'];
-        cloudant = nano({
-            url: "https://"+username+".cloudant.com",
-            cookie: cookies[username]
-        });
-        
-        // ping to ensure we're logged in
-        cloudant.request({
-            path: 'test_porter'
-        }, function (err, body, headers) {
-            if (!err) {
-                console.log(body, headers);
-            }
-            else {
-                console.log("Could not connect to server.")
-            }
-        });
-    }
-});
 
 function requireLogin(req, res, next) {
     console.log(req.session.user);

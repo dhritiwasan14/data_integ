@@ -1,4 +1,4 @@
-
+/* 
 const path = require('path');
 const fs = require('fs');
 const mainPath = 'images';
@@ -154,4 +154,4 @@ function predict(image) {
 
 }
 
-module.exports = {predictIndividual, predict, trainSingle, loadBase64, loadModel, trainNew, fs, fr, recognizer, detector, cv};
+module.exports = {predictIndividual, predict, trainSingle, loadBase64, loadModel, trainNew, fs, fr, recognizer, detector, cv}; */
