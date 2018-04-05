@@ -5,7 +5,7 @@ var authenticator = require('authenticator');
 var QRCode = require('qr-image');
 var bodyParser = require('body-parser');
 var face_rec2 = require('./face-rec.js');
-var db = require('../server/db')
+var db = require('../server/db').getDatabase();
 
 const fr = require('face-recognition');
 const path = require('path');
@@ -18,13 +18,12 @@ const detector = fr.FaceDetector(); */
 const saltRounds = 10;
 
 function requireLogin(req, res, next) {
-    console.log(req.session.user);
     if (req.session && req.session.user) {
         db.get(req.session.user, function(err, body, header) {
-            console.log(err);
             if (err) {
                 res.redirect('/');
             } else {
+                req.session._rev = body._rev
                 next();
             }
         });
@@ -111,11 +110,6 @@ router.post('/signup', function(req, res) {
         // must check if database contains entry
         db.get(req.body.username, function(err, body, headers)  {
             if (err) {
-                app.use(cookieSession({
-                    name: 'session',
-                    keys: [req.body.username],
-                    maxAge: 24 * 60 * 60 * 1000 // 24 hours
-                }));
                 db.insert({"username": req.body.username, "password": hash, "qrkey":formattedKey}, req.body.username, function (err, body, headers) {
                     console.log("trying to add user info");
                     if (!err) {
@@ -166,11 +160,17 @@ router.post('/documents', requireLogin, function(req, res) {
     let timeElapsed = Date.now() - req.session.time;
     if (timeElapsed < 1000 * 60 * 3) { // time limit of 3 minutes
         // TODO: store the image into the database
-        res.status(200);
+        console.log("Inserting");
+        db.insert({_id: test123, _rev: req.session._rev, test: 'hello world'}, req.session.user, function(err, body) {
+            console.log(err);
+            console.log("Finished inserting");
+            res.status(200);
+            res.send();
+        })
     } else {
         res.status(202);
+        res.send();
     }
-    res.send();
 })
 
 module.exports = router;
