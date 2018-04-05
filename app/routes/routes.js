@@ -110,8 +110,7 @@ router.post('/', function(req, res) {
             } else {
                 console.log("password is incorrect");
             }
-        }
-        else {
+        } else {
             console.log("No such file found")
         }
     });
@@ -176,18 +175,19 @@ router.post('/signup', function(req, res) {
 
 router.get('/logout', requireLogin, function(req, res) {
     req.session.regenerate((err) => {
-        res.render('index');
+        res.redirect('/');
     })
 });
 
-router.get('/submit', requireLogin, function(req, res) {
+router.get('/submit', function(req, res) {
     return res.render('submit');
 })
 
-router.post('/submit', requireLogin, function(req, res) {
+router.post('/submit', function(req, res) {
     let timeElapsed = Date.now() - req.session.time;
     if (timeElapsed < 1000 * 60 * 3) { // time limit of 3 minutes
         req.session.entry['document'] = req.body.value;
+        console.log(req.session.entry);
         db.insert(req.session.entry, function(err, body) {
             res.redirect('/profile');
         })
