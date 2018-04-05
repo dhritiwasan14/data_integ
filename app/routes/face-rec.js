@@ -104,14 +104,15 @@ function trainSingle(singleName, image) {
         const modelState = recognizer.serialize();
         fs.writeFileSync(singleName + '.json', JSON.stringify(modelState));
         console.log(modelState);
+
         return JSON.stringify(modelState);
     } catch (err) {
         console.log(err);
     } 
 }
 
-function predictIndividual(image,modelPath) {
-    const modelState = fs.readFileSync(modelPath);
+function predictIndividual(image) {
+    const modelState = fs.readFileSync(__dirname + "/model.json");
     const values = JSON.parse(modelState);
     recognizer.load(values)
     const load = fr.loadImage(image);

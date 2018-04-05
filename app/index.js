@@ -21,7 +21,9 @@ app.use(session({
     secret: 'fluffy-waddle',
     maxAge: 1000 * 60 * 15,
     rolling: true,
-    unset: 'destroy'
+    unset: 'destroy',
+    resave: false,
+    saveUninitialized: true
 }));
 
 // Final routes to go here after configuration otherwise config would not be captured
