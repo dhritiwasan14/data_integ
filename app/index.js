@@ -11,8 +11,8 @@ var database = require('./server/db');
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/public'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json({ limit: '5mb', extended: false }));
+app.use(bodyParser.urlencoded({ limit: '5mb', extended: false }));
 app.use(bodyParser.text({limit : '1mb'}));
 
 // handle sessions

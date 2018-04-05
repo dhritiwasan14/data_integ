@@ -64,8 +64,8 @@ router.post('/facerec', requireLogin, function(req, res) {
     console.log(req.session.user);
     console.log('testing image');
     console.log(req.body);
-    //var bestPrediction = face_rec2.predictIndividual(req.body);
-    var bestPrediction = false;
+    var bestPrediction = face_rec2.predictIndividual(req.body.value);
+    
     try {
     if (bestPrediction === req.session.user) {
         req.session.time = Date.now();

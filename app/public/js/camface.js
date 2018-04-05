@@ -1,6 +1,9 @@
 window.onload = () => {
     let video = document.getElementById('camdemo');
     let verifyBtn = document.getElementById('verify');
+    let form = document.getElementById('loginform');
+    
+    
     let imageCapture;
     
     navigator.mediaDevices.getUserMedia({ video: true, audio: false, fps: 15 })
@@ -10,7 +13,7 @@ window.onload = () => {
         let vs = stream.getVideoTracks()[0];
         imageCapture = new ImageCapture(vs);
         
-        verifyBtn.onsubmit = verify;
+        verifyBtn.onclick = verify;
     })
     .catch(function(err) {
         console.log(err);
@@ -18,16 +21,15 @@ window.onload = () => {
     })
 
     function verify(event) {
-        
         console.log('i do come here');
         imageCapture.takePhoto()
         .then(blob => {
             let reader = new FileReader();
             reader.onloadend = (event) => {
-                let input = document.createElement('input');
+                var input = document.getElementById("value");
                 input.value = reader.result;
-                let form = document.getElementById('form');
-                form.appendChild(input);
+                
+                form.submit();
                 /* let xhttp = new XMLHttpRequest();
                 xhttp.open("POST", "facerec", true);
                 xhttp.setRequestHeader("Content-type", "text/plain;charset=utf8");
