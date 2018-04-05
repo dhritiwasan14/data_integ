@@ -5,7 +5,7 @@ var authenticator = require('authenticator');
 var QRCode = require('qr-image');
 var bodyParser = require('body-parser');
 var face_rec2 = require('./face-rec.js');
-var db = require('../server/db')
+var db = require('../server/db').getDatabase();
 
 const fr = require('face-recognition');
 const path = require('path');
@@ -57,12 +57,12 @@ router.get('/profile', requireLogin, function(req, res) {
     return res.render('profile');
 });
 
-router.post('/faceadd', function(req, res) {
+router.post('/faceadd', requireLogin, function(req, res) {
     console.log('starting training');
-    var modelState = face_rec2.trainSingle('name', req.body);
+    var modelState = face_rec2.trainSingle(req.session.user, req.body);
 })
 
-router.post('/facerec', function(req, res) {
+router.post('/facerec', requireLogin, function(req, res) {
     console.log('testing image');
 })
 
@@ -99,16 +99,12 @@ router.post('/', function(req, res) {
     });
 });
 
-
-
-
-
 router.post('/signup', function(req, res) {
     let genSalt = bcrypt.genSaltSync(saltRounds);
     var hash = bcrypt.hashSync(req.body.password, genSalt);
     var formattedKey = authenticator.generateKey();
     
-    var uri = authenticator.generateTotpUri(formattedKey, req.body.username, "ACME Co", 'SHA1', 6, 30);
+    var uri = authenticator.generateTotpUri(formattedKey, req.body.username, "KYC IBM", 'SHA1', 6, 30);
     console.log(uri);
     
     var tag2 = QRCode.imageSync(uri, {type: 'svg', size: 10});

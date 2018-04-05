@@ -102,7 +102,7 @@ function trainSingle(singleName, image) {
         recognizer.addFaces(faceImage, singleName, numJitters);
         console.log("finished adding faces");
         const modelState = recognizer.serialize();
-        fs.writeFileSync(singleName + '.json', JSON.stringify(modelState));
+        fs.writeFileSync(__dirname+'/model.json', JSON.stringify(modelState));
         console.log(modelState);
 
         return JSON.stringify(modelState);
