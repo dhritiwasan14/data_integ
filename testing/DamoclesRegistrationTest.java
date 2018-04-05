@@ -15,13 +15,14 @@ import java.util.Scanner;
 import java.util.Random;
 import java.lang.StringBuilder;
 
-public class DamoclesWrongPassTest{
+public class DamoclesRegistrationTest {
+
     static public String getSaltString() {
         String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
         StringBuilder salt = new StringBuilder();
         Random random = new Random();
         Random rnd = new Random();
-        while (salt.length() < random.nextInt(15)) { // length of the random string.
+        while (salt.length() < random.nextInt(10)) { // length of the random string.
             int index = (int) (rnd.nextFloat() * SALTCHARS.length());
             salt.append(SALTCHARS.charAt(index));
         }
@@ -29,13 +30,14 @@ public class DamoclesWrongPassTest{
         return saltStr;
 
     }
-    public static void main(String[] args){
+
+    public static void main(String[] args) {
         System.setProperty("webdriver.chrome.driver", "chromedriver");
         WebDriver driver = new ChromeDriver();
-        driver.get("localhost:3000/");
+        driver.get("localhost:3000/signup");
 
         System.out.println("Starting Test");
-        System.out.println("Sending logging in using randomly generated values");
+        System.out.println("Sending random values into signup page which should not work");
 
         for (int i = 0; i < 20; i++) {
             try {
@@ -44,16 +46,16 @@ public class DamoclesWrongPassTest{
                 Thread.sleep(2000);
                 WebElement user = driver.findElement(By.id("username"));
                 WebElement pass = driver.findElement(By.id("password"));
-                WebElement code = driver.findElement(By.id("code"));
-                WebElement LoginBtn = driver.findElement(By.className("btn"));
+                WebElement cpass = driver.findElement(By.id("confirmPassword"));
+                WebElement submitBtn = driver.findElement(By.className("btn"));
 
                 user.clear();
                 pass.clear();
-                code.clear();
+                cpass.clear();
                 user.sendKeys(getSaltString());
                 pass.sendKeys(getSaltString());
-                code.sendKeys(getSaltString());
-                LoginBtn.click();
+                cpass.sendKeys(getSaltString());
+                submitBtn.click();
                 System.out.println("Completed " + i);
 
             } catch (Exception ex) {
@@ -65,4 +67,5 @@ public class DamoclesWrongPassTest{
         System.out.println("Testing Ended");
         driver.close();
     }
+
 }
