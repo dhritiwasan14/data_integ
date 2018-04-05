@@ -71,3 +71,23 @@ video {
     text-decoration: none;
     padding: 15px 32px;
 }
+
+.btn-default:hover{
+    font-family: 'Roboto Condensed', sans-serif;
+    background-color: #000080;
+    color: white;
+    font-size: 16px;
+    border: none;
+    text-decoration: none;
+    padding: 15px 32px;
+}
+
+.btn-default:disabled{
+    font-family: 'Roboto Condensed', sans-serif;
+    background-color: #ADD8E6;
+    color: white;
+    font-size: 16px;
+    border: none;
+    text-decoration: none;
+    padding: 15px 32px;
+}
