@@ -1,26 +1,29 @@
-
-<% include partials/header.ejs %>
-
-<div class="container">
-    <div class="row">
-        <div class="col-sm-6 col-sm-offset-3">
-            <div class="bs-callout bs-callout-primary">
-                <h4>Connect Google Authenticator to your Account</h4>
-                <p>Scan QR code and press <strong>Save</strong> button.</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include("partials/head"); %>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6 col-sm-offset-3">
+                <div class="bs-callout bs-callout-primary">
+                    <h4>Connect Google Authenticator to your Account</h4>
+                    <p>Scan QR code and press <strong>Save</strong> button.</p>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-6 col-sm-offset-3">
-            
-            <form method="post">
-                <div class="form-group">
-                    <%- qr %>
-                </div>
-                <button type="submit" class="btn btn-warning btn-lg">Continue</button>
-            </form>
+        <div class="row">
+            <div class="col-sm-6 col-sm-offset-3">
+                
+                <form method="post">
+                    <div class="form-group">
+                        <%- qr %>
+                    </div>
+                    <button type="submit" class="btn btn-warning btn-lg">Continue</button>
+                </form>
+            </div>
         </div>
-    </div>
-</div>
-
-<% include partials/footer.ejs %>
+    </div>    
+</body>
+</html>
