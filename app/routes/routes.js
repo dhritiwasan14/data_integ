@@ -58,7 +58,18 @@ router.get('/faceadd', requireLogin, function(req, res) {
 })
 
 router.get('/signup', function(req, res) {
-    return res.render('register');
+    let config = {
+        "message" : ""
+    }
+    if(req.session.valid === false) {
+        config.message = "Account already exist/taken"
+        req.session.valid = null;
+    }
+    if(req.session.cpassword === false) {
+        config.message = "Passwords do not match"
+        req.session.cpassword = null;
+    }
+    return res.render('register', config);
 });
 
 router.get('/profile', requireLogin, function(req, res) {
@@ -188,6 +199,8 @@ router.post('/signup', function(req, res) {
         
         // must check if database contains entry
         db.get(req.body.username, function(err, body, headers)  {
+            req.session.valid = false;
+            req.session.cpassword = false;
             if (err) {
                 let entry = {
                     "username": req.body.username,
@@ -199,18 +212,28 @@ router.post('/signup', function(req, res) {
                 db.insert(entry, req.body.username, function (err, body, headers) {
                     console.log("trying to add user info");
                     if (!err) {
-                        return res.render('setup-2fa', {
-                            qr: tag2
-                        })
+                        req.session.valid = true;
+                        
                     }
                 })
             } else {
                 console.log('Account exists');
             }
+
+            if (req.session.valid) {
+                return res.render('setup-2fa', {
+                    qr: tag2
+                });
+            } else {
+                req.session.cpassword = true;
+                res.redirect('/signup');
+                
+            }
         })
     }
     else {
-        // error must be reported
+        req.session.cpassword = false;
+        res.redirect('/signup');
     }
 });
 
