@@ -112,10 +112,11 @@ function trainSingle(singleName, image) {
 }
 
 function predictIndividual(image) {
+    try {
     const modelState = fs.readFileSync(__dirname + "/model.json");
     const values = JSON.parse(modelState);
     recognizer.load(values)
-    const load = fr.loadBase64(image);
+    const load = loadBase64(image);
     
     var detectedFace = detector.detectFaces(load, 200);
     if (detectedFace.length < 1) {
@@ -130,6 +131,9 @@ function predictIndividual(image) {
             return 'Not able to verify';
         }
 
+    }
+    } catch (err) {
+        console.log(err);
     }
 
 }

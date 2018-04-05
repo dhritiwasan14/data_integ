@@ -1,7 +1,7 @@
 
 window.onload = () => {
     let video = document.getElementById('camdemo');
-    let verifyBtn = document.getElementById('submit');
+    
     let submitBtn = document.getElementById('submit');
     let imageCapture;
     
@@ -12,7 +12,7 @@ window.onload = () => {
         let vs = stream.getVideoTracks()[0];
         imageCapture = new ImageCapture(vs);
         
-        verifyBtn.onclick = verify;
+        
         submitBtn.onclick = submit;
     })
     .catch(function(err) {
@@ -26,7 +26,7 @@ window.onload = () => {
             let reader = new FileReader();
             reader.onloadend = (event) => {
                 let xhttp = new XMLHttpRequest();
-                xhttp.open("POST", "face", true);
+                xhttp.open("POST", "faceadd", true);
                 xhttp.setRequestHeader("Content-type", "text/plain;charset=utf8");
                 xhttp.send(reader.result);
             };
@@ -38,22 +38,6 @@ window.onload = () => {
         });
     }
 
-    function verify(event) {
-        imageCapture.takePhoto()
-        .then(blob => {
-            let reader = new FileReader();
-            reader.onloadend = (event) => {
-                let xhttp = new XMLHttpRequest();
-                xhttp.open("POST", "face", true);
-                xhttp.setRequestHeader("Content-type", "text/plain;charset=utf8");
-                xhttp.send(reader.result);
-            };
-            reader.readAsDataURL(blob);
-        })
-        .catch(err => {
-            console.log(err);
-        })
-    }
 }
 // document.getElementById("savefile").addEventListener('click', function () {
 //     if (enabled) {

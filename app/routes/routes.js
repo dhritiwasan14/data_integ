@@ -36,12 +36,12 @@ router.get('/', function(req, res) {
     console.log(req.session.user);
     return res.render('index'); 
 });
-router.get('/facerec', function (req, res) {
+router.get('/facerec', requireLogin, function (req, res) {
     console.log(req.session.user);
     return res.render('verify_face');
 })
 
-router.get('/faceadd', function(req, res) {
+router.get('/faceadd', requireLogin, function(req, res) {
     console.log(req.session.user);
     return res.render('face');
 })
@@ -49,12 +49,6 @@ router.get('/faceadd', function(req, res) {
 router.get('/signup', function(req, res) {
     return res.render('register');
 });
-
-router.get('/login', requireLogin, function(req, res) {
-    
-    return res.render('face');
-});
-
 
 router.get('/profile', requireLogin, function(req, res) {
     return res.render('profile');
@@ -70,6 +64,13 @@ router.post('/facerec', requireLogin, function(req, res) {
     console.log(req.session.user);
     console.log('testing image');
     var bestPrediction = face_rec2.predictIndividual(req.body);
+    if (bestPrediction === req.session.user) {
+        req.session.time = Date.now();
+        return res.redirect('/submit');
+
+    } else {
+        console.log('facial recognition failed');
+    }
 })
 
 router.post('/', function(req, res) {
@@ -146,10 +147,6 @@ router.get('/logout', requireLogin, function(req, res) {
     })
 });
 
-router.get('/fv', requireLogin, function(req, res) {
-    res.render('fv');
-});
-
 router.post('/receivedImage', requireLogin, function(req, res) {
     // TODO: use the request to check whether the face data matches
     let match = true;
@@ -164,7 +161,7 @@ router.post('/receivedImage', requireLogin, function(req, res) {
 })
 
 router.get('/submit', requireLogin, function(req, res) {
-    res.render('submit');
+    return res.render('submit');
 })
 
 router.post('/documents', requireLogin, function(req, res) {
