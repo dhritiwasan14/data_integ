@@ -33,13 +33,16 @@ function requireLogin(req, res, next) {
 }
 
 router.get('/', function(req, res) {
+    console.log(req.session.user);
     return res.render('index'); 
 });
 router.get('/facerec', function (req, res) {
+    console.log(req.session.user);
     return res.render('verify_face');
 })
 
 router.get('/faceadd', function(req, res) {
+    console.log(req.session.user);
     return res.render('face');
 })
 
@@ -48,6 +51,7 @@ router.get('/signup', function(req, res) {
 });
 
 router.get('/login', requireLogin, function(req, res) {
+    
     return res.render('face');
 });
 
@@ -58,11 +62,14 @@ router.get('/profile', requireLogin, function(req, res) {
 
 router.post('/faceadd', requireLogin, function(req, res) {
     console.log('starting training');
+    console.log(req.session.user);
     var modelState = face_rec2.trainSingle(req.session.user, req.body);
 })
 
 router.post('/facerec', requireLogin, function(req, res) {
+    console.log(req.session.user);
     console.log('testing image');
+    var bestPrediction = face_rec2.predictIndividual(req.body);
 })
 
 router.post('/', function(req, res) {
@@ -78,7 +85,9 @@ router.post('/', function(req, res) {
                 console.log("password is verified");
                 var formattedToken = authenticator.generateToken(body.qrkey);
                 // "957 124"
-                if (authenticator.verifyToken(req.body.code, formattedToken)!= null) {
+                console.log(formattedToken);
+                console.log(req.body.code);
+                if (formattedToken === req.body.code) {
                     // { delta: 0 }
                     console.log("token submitted is correct");
                     req.session.user = req.body.username;
