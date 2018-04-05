@@ -39,7 +39,7 @@ $ npm install npm@latest -g
 Run the following on terminal
 
 ```
-$ cd data_integ
+$ cd data_integ/app
 $ npm install
 ```
 
