@@ -21,7 +21,6 @@ function requireLogin(req, res, next) {
                 res.redirect('/');
             } else {
                 req.session.entry = body;
-                console.log(body.document.substr(0, 100));
                 next();
             }
         });
@@ -105,8 +104,7 @@ router.post('/', function(req, res) {
             } else {
                 console.log("password is incorrect");
             }
-        }
-        else {
+        } else {
             console.log("No such file found")
         }
     });
