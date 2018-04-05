@@ -56,7 +56,9 @@ window.onload = () => {
           if (xhttp.status === 202) {
             alert("Exceeded time limit. Please try again.")
           } else if (xhttp.status === 200) {
-            alert("Sucess!");
+            alert("Success!");
+          } else {
+            alert("Unknown state found");
           }
           
           document.location.href = 'profile';
