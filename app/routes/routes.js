@@ -88,7 +88,7 @@ router.post('/', function(req, res) {
             console.log(body);
             console.log(body.password);
             let hash = bcrypt.hashSync(req.body.password, body.salt);
-            
+    
             if (body.password === hash) {
                 console.log("password is verified");
                 var formattedToken = authenticator.generateToken(body.qrkey);
@@ -99,6 +99,12 @@ router.post('/', function(req, res) {
                     // { delta: 0 }
                     console.log("token submitted is correct");
                     req.session.user = req.body.username;
+                    
+                    if (req.body.username === "admin") {
+                        req.session.isadmin = true;
+                        return res.redirect('/adminprofile');
+                    }
+                    req.session.isadmin = false;
                     return res.redirect('/profile');
                 }
                 else {
@@ -112,6 +118,19 @@ router.post('/', function(req, res) {
             console.log("No such file found")
         }
     });
+});
+
+router.get('/adminprofile', function(req, res) {
+    var users = [];
+    db.list(function(err, body) {
+        if (!err) {
+          body.rows.forEach(function(doc) {
+            users.push(doc);
+          });
+        }
+      });
+    console.log(users);
+    return res.render('adminprofile', users);
 });
 
 router.post('/signup', function(req, res) {
