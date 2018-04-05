@@ -67,10 +67,10 @@ router.post('/facerec', requireLogin, function(req, res) {
     if (bestPrediction === req.session.user) {
         req.session.time = Date.now();
         console.log('trying to redirect');
-        return res.render('submit');
+        res.redirect('submit');
     } else {
         console.log('facial recognition failed');
-        return res.render('verify_face');
+        res.redirect('verify_face');
     }
 } catch (err) {
     console.log(err);
@@ -150,19 +150,6 @@ router.get('/logout', requireLogin, function(req, res) {
         res.render('index');
     })
 });
-
-router.post('/receivedImage', requireLogin, function(req, res) {
-    // TODO: use the request to check whether the face data matches
-    let match = true;
-    if (match) {
-        res.status(200);
-        req.session.time = Date.now();
-        res.send({ redirect: 'submit'})
-    } else {
-        res.status(202);
-        res.send("Authentication Failed");
-    }
-})
 
 router.get('/submit', requireLogin, function(req, res) {
     return res.render('submit');
