@@ -21,6 +21,7 @@ function requireLogin(req, res, next) {
                 res.redirect('/');
             } else {
                 req.session.entry = body;
+                console.log(body.document.substr(0, 100));
                 next();
             }
         });
@@ -151,14 +152,15 @@ router.get('/logout', requireLogin, function(req, res) {
     })
 });
 
-router.get('/submit', requireLogin, function(req, res) {
+router.get('/submit', function(req, res) {
     return res.render('submit');
 })
 
-router.post('/submit', requireLogin, function(req, res) {
+router.post('/submit', function(req, res) {
     let timeElapsed = Date.now() - req.session.time;
     if (timeElapsed < 1000 * 60 * 3) { // time limit of 3 minutes
         req.session.entry['document'] = req.body.value;
+        console.log(req.session.entry);
         db.insert(req.session.entry, function(err, body) {
             res.redirect('/profile');
         })
