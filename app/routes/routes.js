@@ -141,11 +141,11 @@ router.get('/logout', requireLogin, function(req, res) {
     })
 });
 
-router.get('/fv', function(req, res) {
+router.get('/fv', requireLogin, function(req, res) {
     res.render('fv');
 });
 
-router.post('/receivedImage', function(req, res) {
+router.post('/receivedImage', requireLogin, function(req, res) {
     // TODO: use the request to check whether the face data matches
     let match = true;
     if (match) {
@@ -158,11 +158,11 @@ router.post('/receivedImage', function(req, res) {
     }
 })
 
-router.get('/submit', function(req, res) {
+router.get('/submit', requireLogin, function(req, res) {
     res.render('submit');
 })
 
-router.post('/documents', function(req, res) {
+router.post('/documents', requireLogin, function(req, res) {
     let timeElapsed = Date.now() - req.session.time;
     if (timeElapsed < 1000 * 60 * 3) { // time limit of 3 minutes
         // TODO: store the image into the database
