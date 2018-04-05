@@ -62,6 +62,7 @@ http://localhost:3000
 * [opencv4nodejs](https://github.com/justadudewhohacks/opencv4nodejs) - additional facial recognition library to convert image files
 * [bcrypt](https://www.npmjs.com/package/bcrypt) - hashing for data transfer
 * [express-session](https://www.npmjs.com/package/express-sessions)
+* [Nano](https://www.npmjs.com/package/nano) - Database functionality
 
 ## Authors
 
@@ -77,3 +78,4 @@ See the [LICENSE.md](LICENSE.md) file for details
 
 ## Acknowledgments
 * [justadudewhohacks](https://github.com/justadudewhohacks) for both repo of facial recognition
+* [Cloudant](https://www.ibm.com/cloud/cloudant) was the database we stored our data on
