@@ -1,4 +1,9 @@
 window.onload = () => {
+
+  setTimeout(() => {
+    alert("3 minutes elapsed. Please retry.");
+    window.location.href = "/profile";
+  }, 1000 * 175); // redirect after 2min 55ss
   
   let video = document.getElementById('input');
   let output = document.getElementById('output');

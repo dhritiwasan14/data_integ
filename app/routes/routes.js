@@ -173,11 +173,9 @@ router.post('/submit', requireLogin, function(req, res) {
     if (timeElapsed < 1000 * 60 * 3) { // time limit of 3 minutes
         req.session.entry['document'] = req.body.value;
         db.insert(req.session.entry, function(err, body) {
-            res.status(200);
             res.redirect('/profile');
         })
     } else {
-        res.status(202);
         res.redirect('/profile');
     }
 })
