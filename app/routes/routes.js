@@ -146,7 +146,7 @@ router.post('/signup', function(req, res) {
 
 router.get('/logout', requireLogin, function(req, res) {
     req.session.regenerate((err) => {
-        res.render('index');
+        res.redirect('/');
     })
 });
 
