@@ -12,9 +12,6 @@ const path = require('path');
 const fs = require('fs');
 const mainPath = 'images';
 
-/* const recognizer = fr.FaceRecognizer();
-const detector = fr.FaceDetector(); */
-
 const saltRounds = 10;
 
 function requireLogin(req, res, next) {
@@ -70,10 +67,10 @@ router.post('/facerec', requireLogin, function(req, res) {
     if (bestPrediction === req.session.user) {
         req.session.time = Date.now();
         console.log('trying to redirect');
-        return res.render('submit');
+        res.redirect('submit');
     } else {
         console.log('facial recognition failed');
-        return res.render('verify_face');
+        res.redirect('verify_face');
     }
 } catch (err) {
     console.log(err);
@@ -121,16 +118,26 @@ router.post('/', function(req, res) {
 });
 
 router.get('/adminprofile', function(req, res) {
+    if (req.session.isadmin == false && req.session.user != null) {
+        return res.redirect('/profile');
+    } else if (req.session.isadmin == false) {
+        return res.redirect('/login');
+    }
     var users = [];
-    db.list(function(err, body) {
-        if (!err) {
-          body.rows.forEach(function(doc) {
-            users.push(doc);
-          });
+    db.list(function(errnew, bodynew) {
+        var users = [];
+        if (!errnew) {
+            bodynew.rows.forEach(function(docnew) {
+            console.log(docnew);
+            users.push(docnew);
+            });
         }
-      });
-    console.log(users);
-    return res.render('adminprofile', users);
+        res.render('adminprofile', {
+            users: users
+        });
+    });
+    
+    
 });
 
 router.post('/signup', function(req, res) {
@@ -173,35 +180,39 @@ router.get('/logout', requireLogin, function(req, res) {
     })
 });
 
-router.post('/receivedImage', requireLogin, function(req, res) {
-    // TODO: use the request to check whether the face data matches
-    let match = true;
-    if (match) {
-        res.status(200);
-        req.session.time = Date.now();
-        res.send({ redirect: 'submit'})
-    } else {
-        res.status(202);
-        res.send("Authentication Failed");
-    }
-})
-
 router.get('/submit', requireLogin, function(req, res) {
     return res.render('submit');
 })
 
-router.post('/documents', requireLogin, function(req, res) {
+router.post('/submit', requireLogin, function(req, res) {
     let timeElapsed = Date.now() - req.session.time;
     if (timeElapsed < 1000 * 60 * 3) { // time limit of 3 minutes
-        req.session.entry['document'] = req.body;
+        req.session.entry['document'] = req.body.value;
         db.insert(req.session.entry, function(err, body) {
-            res.status(200);
-            res.send();
+            res.redirect('/profile');
         })
     } else {
-        res.status(202);
-        res.send();
+        res.redirect('/profile');
     }
 })
+
+
+router.get('/showUser/:id', function (req, res) {
+    console.log(req.params.id);
+    db.get(req.params.id, function (err, body, headers) {
+        if (!err) {
+            return res.render('display_user', {
+                userid: body.username, 
+                password: body.password, 
+                qrkey: body.qrkey, 
+                salt: body.salt, 
+                document: body.document
+            })
+        } else {
+            console.log('encountered an error'+err);
+        }
+    })
+});
+
 
 module.exports = router;
