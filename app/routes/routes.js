@@ -23,7 +23,7 @@ function requireLogin(req, res, next) {
             if (err) {
                 res.redirect('/');
             } else {
-                req.session._rev = body._rev
+                req.session.entry = body;
                 next();
             }
         });
@@ -112,7 +112,7 @@ router.post('/signup', function(req, res) {
         // must check if database contains entry
         db.get(req.body.username, function(err, body, headers)  {
             if (err) {
-                db.insert({"username": req.body.username, "password": hash, "qrkey":formattedKey}, req.body.username, function (err, body, headers) {
+                db.insert({"username": req.body.username, "password": hash, "qrkey":formattedKey, "salt": genSalt}, req.body.username, function (err, body, headers) {
                     console.log("trying to add user info");
                     if (!err) {
                         return res.render('setup-2fa', {
@@ -161,11 +161,8 @@ router.get('/submit', requireLogin, function(req, res) {
 router.post('/documents', requireLogin, function(req, res) {
     let timeElapsed = Date.now() - req.session.time;
     if (timeElapsed < 1000 * 60 * 3) { // time limit of 3 minutes
-        // TODO: store the image into the database
-        console.log("Inserting");
-        db.insert({_id: test123, _rev: req.session._rev, test: 'hello world'}, req.session.user, function(err, body) {
-            console.log(err);
-            console.log("Finished inserting");
+        req.session.entry['document'] = req.body;
+        db.insert(req.session.entry, function(err, body) {
             res.status(200);
             res.send();
         })
