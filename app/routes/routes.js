@@ -84,13 +84,19 @@ router.post('/', function(req, res) {
             console.log(body);
             console.log(body.password);
             let hash = bcrypt.hashSync(req.body.password, body.salt);
-            
+    
             if (body.password === hash) {
                 console.log("password is verified");
                 var formattedToken = authenticator.generateToken(body.qrkey);
                 if (formattedToken === req.body.code) {
                     console.log("token submitted is correct");
                     req.session.user = req.body.username;
+                    
+                    if (req.body.username === "admin") {
+                        req.session.isadmin = true;
+                        return res.redirect('/adminprofile');
+                    }
+                    req.session.isadmin = false;
                     return res.redirect('/profile');
                 }
                 else {
@@ -103,6 +109,29 @@ router.post('/', function(req, res) {
             console.log("No such file found")
         }
     });
+});
+
+router.get('/adminprofile', function(req, res) {
+    if (req.session.isadmin == false && req.session.user != null) {
+        return res.redirect('/profile');
+    } else if (req.session.isadmin == false) {
+        return res.redirect('/login');
+    }
+    var users = [];
+    db.list(function(errnew, bodynew) {
+        var users = [];
+        if (!errnew) {
+            bodynew.rows.forEach(function(docnew) {
+            console.log(docnew);
+            users.push(docnew);
+            });
+        }
+        res.render('adminprofile', {
+            users: users
+        });
+    });
+    
+    
 });
 
 router.post('/signup', function(req, res) {
@@ -141,7 +170,7 @@ router.post('/signup', function(req, res) {
 
 router.get('/logout', requireLogin, function(req, res) {
     req.session.regenerate((err) => {
-        res.render('index');
+        res.redirect('/');
     })
 });
 
@@ -160,5 +189,24 @@ router.post('/submit', requireLogin, function(req, res) {
         res.redirect('/profile');
     }
 })
+
+
+router.get('/showUser/:id', function (req, res) {
+    console.log(req.params.id);
+    db.get(req.params.id, function (err, body, headers) {
+        if (!err) {
+            return res.render('display_user', {
+                userid: body.username, 
+                password: body.password, 
+                qrkey: body.qrkey, 
+                salt: body.salt, 
+                document: body.document
+            })
+        } else {
+            console.log('encountered an error'+err);
+        }
+    })
+});
+
 
 module.exports = router;
