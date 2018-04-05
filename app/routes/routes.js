@@ -78,7 +78,6 @@ router.post('/', function(req, res) {
                 console.log("password is verified");
                 var formattedToken = authenticator.generateToken(body.qrkey);
                 // "957 124"
-                
                 if (authenticator.verifyToken(body.qrkey, formattedToken)!= null) {
                     // { delta: 0 }
                     console.log("token submitted is correct");
