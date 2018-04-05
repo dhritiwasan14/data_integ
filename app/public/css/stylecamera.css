@@ -1,0 +1,63 @@
+h3{margin-bottom: 5px;}
+
+label{
+    font-family: 'Roboto Condensed', sans-serif;
+    cursor: default;
+    position: absolute;
+    left: 50%;
+    top:70%;
+    
+}
+
+input[type=text]{
+    font-size: 16px;
+    padding: 15px 32px;
+    font-family: 'Roboto Condensed', sans-serif;
+    position: absolute;
+    left: 35%;
+    top:70%;
+}
+
+input[type=text]:focus {
+
+    border: 3px solid #555;
+    background-color: lightblue;
+    position: absolute;
+    left: 35%;
+    top:70%;
+}
+
+input[type=button]{
+    font-family: 'Roboto Condensed', sans-serif;
+    background-color: #1968AE;
+    text-align: center;
+    border: none;
+    color: white;
+    font-size: 16px;
+    text-decoration: none;
+    padding: 15px 32px;
+    position: absolute;
+    left: 50%;
+    top:70%;
+
+}
+
+#submit {
+    font-family: 'Roboto Condensed', sans-serif;
+    background-color: #1968AE;
+    text-align: center;
+    border: none;
+    color: white;
+    font-size: 16px;
+    text-decoration: none;
+    padding: 15px 32px;
+    position: absolute;
+    left: 45%;
+    top: 70%;
+}
+video {
+    left: 50%;
+    position: absolute;
+    top: 30%;
+    transform: translate(-50%, -50%);
+}
