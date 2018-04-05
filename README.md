@@ -58,11 +58,10 @@ http://localhost:3000
 
 * [node.js](https://nodejs.org/en/)
 * [Express](https://expressjs.com/)
-* [passport-2fa-totp](https://www.npmjs.com/package/passport-2fa-totp)
 * [face-recognition.js](https://github.com/justadudewhohacks/face-recognition.js?files=1) - facial recognition library used
 * [opencv4nodejs](https://github.com/justadudewhohacks/opencv4nodejs) - additional facial recognition library to convert image files
 * [bcrypt](https://www.npmjs.com/package/bcrypt) - hashing for data transfer
-* [cookie-session](https://www.npmjs.com/package/cookie-session)
+* [express-session](https://www.npmjs.com/package/express-sessions)
 
 ## Authors
 
