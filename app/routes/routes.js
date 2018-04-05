@@ -91,8 +91,6 @@ router.get('/face', function(req, res) {
 router.post('/face', function(req, res) {
     console.log('starting training');
     var modelState = face_rec2.trainSingle('name', req.body);
-    
-    
 })
 
 router.post('/', function(req, res) {
