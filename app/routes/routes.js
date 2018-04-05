@@ -12,9 +12,6 @@ const path = require('path');
 const fs = require('fs');
 const mainPath = 'images';
 
-/* const recognizer = fr.FaceRecognizer();
-const detector = fr.FaceDetector(); */
-
 const saltRounds = 10;
 
 function requireLogin(req, res, next) {
@@ -171,17 +168,17 @@ router.get('/submit', requireLogin, function(req, res) {
     return res.render('submit');
 })
 
-router.post('/documents', requireLogin, function(req, res) {
+router.post('/submit', requireLogin, function(req, res) {
     let timeElapsed = Date.now() - req.session.time;
     if (timeElapsed < 1000 * 60 * 3) { // time limit of 3 minutes
-        req.session.entry['document'] = req.body;
+        req.session.entry['document'] = req.body.value;
         db.insert(req.session.entry, function(err, body) {
             res.status(200);
-            res.send();
+            res.redirect('/profile');
         })
     } else {
         res.status(202);
-        res.send();
+        res.redirect('/profile');
     }
 })
 
