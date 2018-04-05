@@ -34,7 +34,7 @@ function requireLogin(req, res, next) {
 }
 
 router.get('/', function(req, res) {
-
+    
     return res.render('index'); 
 });
 
@@ -55,7 +55,7 @@ router.post('/', function(req, res) {
             console.log(body);
             console.log(body.password);
             let hash = bcrypt.hashSync(req.body.password, body.salt);
-
+            
             if (body.password === hash) {
                 console.log("password is verified");
                 var formattedToken = authenticator.generateToken(body.qrkey);
@@ -141,15 +141,16 @@ router.get('/logout', requireLogin, function(req, res) {
     })
 });
 
-router.get('/fv', requireLogin, function(req, res) {
+router.get('/fv', function(req, res) {
     res.render('fv');
 });
 
-router.post('/receivedImage', requireLogin, function(req, res) {
+router.post('/receivedImage', function(req, res) {
     // TODO: use the request to check whether the face data matches
     let match = true;
     if (match) {
         res.status(200);
+        req.session.time = Date.now();
         res.send({ redirect: 'submit'})
     } else {
         res.status(202);
@@ -157,13 +158,19 @@ router.post('/receivedImage', requireLogin, function(req, res) {
     }
 })
 
-router.get('/submit', requireLogin, function(req, res) {
+router.get('/submit', function(req, res) {
     res.render('submit');
 })
 
-router.post('/documents', requireLogin, function(req, res) {
-    // TODO: store the image into the database
-    console.log(req.body);
+router.post('/documents', function(req, res) {
+    let timeElapsed = Date.now() - req.session.time;
+    if (timeElapsed < 1000 * 60 * 3) { // time limit of 3 minutes
+        // TODO: store the image into the database
+        res.status(200);
+    } else {
+        res.status(202);
+    }
+    res.send();
 })
 
 module.exports = router;
