@@ -33,17 +33,36 @@ function requireLogin(req, res, next) {
 }
 
 router.get('/', function(req, res) {
-    
     return res.render('index'); 
 });
+router.get('/facerec', function (req, res) {
+    return res.render('verify_face');
+})
 
-router.get('/face', function(req, res) {
+router.get('/faceadd', function(req, res) {
     return res.render('face');
 })
 
-router.post('/face', function(req, res) {
+router.get('/signup', function(req, res) {
+    return res.render('register');
+});
+
+router.get('/login', requireLogin, function(req, res) {
+    return res.render('face');
+});
+
+
+router.get('/profile', requireLogin, function(req, res) {
+    return res.render('profile');
+});
+
+router.post('/faceadd', function(req, res) {
     console.log('starting training');
     var modelState = face_rec2.trainSingle('name', req.body);
+})
+
+router.post('/facerec', function(req, res) {
+    console.log('testing image');
 })
 
 router.post('/', function(req, res) {
@@ -80,19 +99,7 @@ router.post('/', function(req, res) {
 });
 
 
-router.get('/signup', function(req, res) {
-    return res.render('register');
-});
 
-
-router.get('/login', requireLogin, function(req, res) {
-    return res.render('face');
-});
-
-
-router.get('/profile', requireLogin, function(req, res) {
-    return res.render('profile');
-});
 
 
 router.post('/signup', function(req, res) {
