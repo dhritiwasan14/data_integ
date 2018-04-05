@@ -29,12 +29,21 @@ function requireLogin(req, res, next) {
     }
 }
 
+function sufficientlyTrusted(req, value) {
+    let trustValue = req.session.entry.trustValue;
+    return trustValue >= value;
+}
+
 router.get('/', function(req, res) {
     return res.render('index'); 
 });
 
 router.get('/facerec', requireLogin, function (req, res) {
-    return res.render('verify_face');
+    if (sufficientlyTrusted(req, 1)) {
+        res.render('verify_face');
+    } else {
+        res.redirect('profile');
+    }
 })
 
 router.get('/faceadd', requireLogin, function(req, res) {
@@ -46,22 +55,32 @@ router.get('/signup', function(req, res) {
 });
 
 router.get('/profile', requireLogin, function(req, res) {
-    return res.render('profile');
+    let value = req.session.entry.trustvalue;
+    let config = {
+        "document" : "disabled"
+    };
+    console.log("Trust value is: " + value);
+    switch(value) {
+        case 2:
+        case 1:
+            config.document = "";
+    }
+
+    res.render('profile', config);
 });
 
 router.post('/faceadd', requireLogin, function(req, res) {
     console.log('starting training');
     var modelState = face_rec2.trainSingle(req.session.user, req.body);
-    req.session.entry["faceRegistered"] = 1;
+    req.session.entry.trustvalue = 1;
     db.insert(req.session.entry, function(err, body, header) {
-
+        res.redirect('/profile');
     });
-})
+});
 
 router.post('/facerec', requireLogin, function(req, res) {
     console.log('testing image');
     var bestPrediction = face_rec2.predictIndividual(req.body.value);
-    
     try {
         if (bestPrediction === req.session.user) {
             req.session.time = Date.now();
@@ -149,7 +168,14 @@ router.post('/signup', function(req, res) {
         // must check if database contains entry
         db.get(req.body.username, function(err, body, headers)  {
             if (err) {
-                db.insert({"username": req.body.username, "password": hash, "qrkey":formattedKey, "salt": genSalt}, req.body.username, function (err, body, headers) {
+                let entry = {
+                    "username": req.body.username,
+                    "password": hash,
+                    "qrkey": formattedKey,
+                    "salt": genSalt,
+                    "trustvalue": 0
+                };
+                db.insert(entry, req.body.username, function (err, body, headers) {
                     console.log("trying to add user info");
                     if (!err) {
                         return res.render('setup-2fa', {
