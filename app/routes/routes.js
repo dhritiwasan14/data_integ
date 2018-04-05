@@ -35,7 +35,14 @@ function sufficientlyTrusted(req, value) {
 }
 
 router.get('/', function(req, res) {
-    return res.render('index'); 
+    let config = {
+        "message" : ""
+    }
+    if(req.session.authenticated === false) {
+        config.message = "Incorrect login credentials. Try again."
+        req.session.authenticated = null;
+    }
+    return res.render('index', config); 
 });
 
 router.get('/facerec', requireLogin, function (req, res) {
@@ -99,6 +106,9 @@ router.post('/', function(req, res) {
     console.log(req.body);
     
     db.get(req.body.username, function (err, body, headers) {
+        req.session.isadmin = false;
+        req.session.authenticated = false;
+
         if (!err) {
             console.log(body);
             console.log(body.password);
@@ -113,10 +123,9 @@ router.post('/', function(req, res) {
                     
                     if (req.body.username === "admin") {
                         req.session.isadmin = true;
-                        return res.redirect('/adminprofile');
                     }
-                    req.session.isadmin = false;
-                    return res.redirect('/profile');
+
+                    req.session.authenticated = true;
                 }
                 else {
                     console.log('Invalid token number used');
@@ -126,6 +135,16 @@ router.post('/', function(req, res) {
             }
         } else {
             console.log("No such file found")
+        }
+
+        if (req.session.authenticated) {
+            if (req.session.isadmin) {
+                res.redirect('/adminprofile');
+            } else {
+                res.redirect('profile');
+            }
+        } else {
+            res.redirect('/');
         }
     });
 });
