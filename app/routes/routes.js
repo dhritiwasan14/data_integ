@@ -30,16 +30,14 @@ function requireLogin(req, res, next) {
 }
 
 router.get('/', function(req, res) {
-    console.log(req.session.user);
     return res.render('index'); 
 });
+
 router.get('/facerec', requireLogin, function (req, res) {
-    console.log(req.session.user);
     return res.render('verify_face');
 })
 
 router.get('/faceadd', requireLogin, function(req, res) {
-    console.log(req.session.user);
     return res.render('face');
 })
 
@@ -53,28 +51,29 @@ router.get('/profile', requireLogin, function(req, res) {
 
 router.post('/faceadd', requireLogin, function(req, res) {
     console.log('starting training');
-    console.log(req.session.user);
     var modelState = face_rec2.trainSingle(req.session.user, req.body);
+    req.session.entry["faceRegistered"] = 1;
+    db.insert(req.session.entry, function(err, body, header) {
+
+    });
 })
 
 router.post('/facerec', requireLogin, function(req, res) {
-    console.log(req.session.user);
     console.log('testing image');
-    console.log(req.body);
     var bestPrediction = face_rec2.predictIndividual(req.body.value);
     
     try {
-    if (bestPrediction === req.session.user) {
-        req.session.time = Date.now();
-        console.log('trying to redirect');
-        res.redirect('submit');
-    } else {
-        console.log('facial recognition failed');
-        res.redirect('verify_face');
+        if (bestPrediction === req.session.user) {
+            req.session.time = Date.now();
+            console.log('face matched');
+            res.redirect('submit');
+        } else {
+            console.log('facial recognition failed');
+            res.redirect('verify_face');
+        }
+    } catch (err) {
+        console.log(err);
     }
-} catch (err) {
-    console.log(err);
-}
 })
 
 router.post('/', function(req, res) {
@@ -89,11 +88,7 @@ router.post('/', function(req, res) {
             if (body.password === hash) {
                 console.log("password is verified");
                 var formattedToken = authenticator.generateToken(body.qrkey);
-                // "957 124"
-                console.log(formattedToken);
-                console.log(req.body.code);
                 if (formattedToken === req.body.code) {
-                    // { delta: 0 }
                     console.log("token submitted is correct");
                     req.session.user = req.body.username;
                     return res.redirect('/profile');
@@ -150,18 +145,17 @@ router.get('/logout', requireLogin, function(req, res) {
     })
 });
 
-router.get('/submit', function(req, res) {
+router.get('/submit', requireLogin, function(req, res) {
     return res.render('submit');
 })
 
-router.post('/submit', function(req, res) {
+router.post('/submit', requireLogin, function(req, res) {
     let timeElapsed = Date.now() - req.session.time;
     if (timeElapsed < 1000 * 60 * 3) { // time limit of 3 minutes
         req.session.entry['document'] = req.body.value;
-        console.log(req.session.entry);
         db.insert(req.session.entry, function(err, body) {
             res.redirect('/profile');
-        })
+        });
     } else {
         res.redirect('/profile');
     }
