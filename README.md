@@ -54,6 +54,28 @@ The application will be running on
 ```
 http://localhost:3000
 ```
+
+## Running the tests
+
+In the testing folder, there are java programs (running Selenium) that test the site.
+**DamoclesSTest.java** test links on the dashboard
+**DamoclesRegistrationTest.java** inputs random values into the registration page to ensure that the registration does not go through with random values.
+**DamoclesWrongPassTest.java** is similar to the one above, but test that on the login page instead
+**DamoclesAdminTest.java** test links for the admin dashboard
+
+Firstly, ensure you have the chromedriver in the testing folder, and ensure that the path to the driver is correct. (i.e. for windows, add .exe after chromedriver in each .java file)
+
+Next, run the following in the testing folder
+```
+$ javac *.java
+```
+
+Once the java files are compiled, run the programs by using
+```
+$ java <file-you-want-to-run>
+```
+
+
 ## Built With
 
 * [node.js](https://nodejs.org/en/)
