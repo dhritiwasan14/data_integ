@@ -112,7 +112,9 @@ router.post('/', function(req, res) {
 });
 
 router.get('/adminprofile', function(req, res) {
-    if (req.session.isadmin == false && req.session.user != null) {
+    console.log(req.session.isadmin);
+    console.log(req.session.user);
+    if ((req.session.isadmin == false || req.session.isadmin == undefined) && (req.session.user != null || req.session.user == undefined)) {
         return res.redirect('/profile');
     } else if (req.session.isadmin == false) {
         return res.redirect('/login');
