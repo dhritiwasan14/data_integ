@@ -115,7 +115,7 @@ function predictIndividual(image) {
     const modelState = fs.readFileSync(__dirname + "/model.json");
     const values = JSON.parse(modelState);
     recognizer.load(values)
-    const load = fr.loadImage(image);
+    const load = fr.loadBase64(image);
     
     var detectedFace = detector.detectFaces(load, 200);
     if (detectedFace.length < 1) {
