@@ -162,12 +162,8 @@ router.get('/submit', requireLogin, function(req, res) {
 router.post('/documents', requireLogin, function(req, res) {
     let timeElapsed = Date.now() - req.session.time;
     if (timeElapsed < 1000 * 60 * 3) { // time limit of 3 minutes
-        // TODO: store the image into the database
-        console.log("Inserting");
-        req.session.body.document = req.body;
-        db.insert(req.session.body, function(err, body) {
-            console.log(err);
-            console.log("Finished inserting");
+        req.session.entry['document'] = req.body;
+        db.insert(req.session.entry, function(err, body) {
             res.status(200);
             res.send();
         })
