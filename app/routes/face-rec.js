@@ -67,8 +67,7 @@ function loadModel() {
 }
 
 function loadBase64(base64encoded){
-    console.log('error has occurred');
-    console.log(base64encoded.substring(0, 100));
+    console.log(typeof base64encoded);
     const base64data = base64encoded.replace('data:image/jpeg;base64','')
                                     .replace('data:image/png;base64','');
     const buffer = Buffer.from(base64data, 'base64');

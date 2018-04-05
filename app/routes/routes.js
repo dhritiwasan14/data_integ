@@ -63,14 +63,21 @@ router.post('/faceadd', requireLogin, function(req, res) {
 router.post('/facerec', requireLogin, function(req, res) {
     console.log(req.session.user);
     console.log('testing image');
-    var bestPrediction = face_rec2.predictIndividual(req.body);
+    console.log(req.body);
+    //var bestPrediction = face_rec2.predictIndividual(req.body);
+    var bestPrediction = false;
+    try {
     if (bestPrediction === req.session.user) {
         req.session.time = Date.now();
-        return res.redirect('/submit');
-
+        console.log('trying to redirect');
+        return res.render('submit');
     } else {
         console.log('facial recognition failed');
+        return res.render('verify_face');
     }
+} catch (err) {
+    console.log(err);
+}
 })
 
 router.post('/', function(req, res) {

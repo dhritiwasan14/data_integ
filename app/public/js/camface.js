@@ -10,7 +10,7 @@ window.onload = () => {
         let vs = stream.getVideoTracks()[0];
         imageCapture = new ImageCapture(vs);
         
-        verifyBtn.onclick = verify;
+        verifyBtn.onsubmit = verify;
     })
     .catch(function(err) {
         console.log(err);
@@ -18,15 +18,20 @@ window.onload = () => {
     })
 
     function verify(event) {
+        
         console.log('i do come here');
         imageCapture.takePhoto()
         .then(blob => {
             let reader = new FileReader();
             reader.onloadend = (event) => {
-                let xhttp = new XMLHttpRequest();
+                let input = document.createElement('input');
+                input.value = reader.result;
+                let form = document.getElementById('form');
+                form.appendChild(input);
+                /* let xhttp = new XMLHttpRequest();
                 xhttp.open("POST", "facerec", true);
                 xhttp.setRequestHeader("Content-type", "text/plain;charset=utf8");
-                xhttp.send(reader.result);
+                xhttp.send(reader.result); */
             };
             reader.readAsDataURL(blob);
         })

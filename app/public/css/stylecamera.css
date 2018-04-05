@@ -42,7 +42,7 @@ input[type=button]{
 
 }
 
-#submit {
+#submit, #verify {
     font-family: 'Roboto Condensed', sans-serif;
     background-color: #1968AE;
     text-align: center;
