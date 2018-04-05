@@ -32,8 +32,13 @@ let url = 'https://58dce9f5-340c-4123-93a2-19fb379d26a7-bluemix:0a5c5e9b39efbd7f
 
 let account = nano(url);
 let db = account.use('user_details');
+let dbm = account.use('model');
 
 
 exports.getDatabase = function() {
   return db; 
+
+}
+exports.getModelDatabase =  function() {
+  return dbm;
 }
