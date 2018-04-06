@@ -1,83 +1,20 @@
 const express = require('express');
 const router = express.Router();
-const bcrypt = require('bcrypt');
-const authenticator = require('authenticator');
 const QRCode = require('qr-image');
-const bodyParser = require('body-parser');
 const face_rec2 = require('../server/face-rec.js');
 const db = require('../server/db').getDatabase();
 
 const fr = require('face-recognition');
 const path = require('path');
 const fs = require('fs');
-const mainPath = 'images';
 
 const saltRounds = 10;
-
-router.get('/', function(req, res) {
-    let config = {
-        "message" : ""
-    }
-    if(req.session.authenticated === false) {
-        config.message = "Incorrect login credentials. Try again."
-        req.session.authenticated = null;
-    }
-    return res.render('index', config); 
-});
-
-router.post('/', function(req, res) {
-    console.log(req.body);
-    
-    db.get(req.body.username, function (err, body, headers) {
-        req.session.isadmin = false;
-        req.session.authenticated = false;
-
-        if (!err) {
-            console.log(body);
-            console.log(body.password);
-            let hash = bcrypt.hashSync(req.body.password, body.salt);
-    
-            if (body.password === hash) {
-                console.log("password is verified");
-                var formattedToken = authenticator.generateToken(body.qrkey);
-                if (formattedToken === req.body.code) {
-                    console.log("token submitted is correct");
-                    req.session.user = req.body.username;
-                    
-                    if (req.body.username === "admin") {
-                        req.session.isadmin = true;
-                    }
-
-                    req.session.authenticated = true;
-                    
-                }
-                else {
-                    console.log('Invalid token number used');
-                }
-            } else {
-                console.log("password is incorrect");
-            }
-        } else {
-            console.log("No such file found")
-        }
-
-        if (req.session.authenticated) {
-            if (req.session.isadmin) {
-                res.redirect('/adminprofile');
-            } else {
-                res.redirect('profile');
-            }
-        } else {
-            res.redirect('/');
-        }
-    });
-});
 
 router.get('/facerec', requireLogin, function (req, res) {
     if (sufficientlyTrusted(req, 1)) {
         res.render('facerec');
     } else {
-        res.redirect('profile');
+        res.redirect('/');
     }
 });
 
@@ -107,7 +44,7 @@ router.post('/faceadd', requireLogin, function(req, res) {
     var modelState = face_rec2.trainSingle(req.session.user, req.body);
     req.session.entry.trustvalue = 1;
     db.insert(req.session.entry, function(err, body, header) {
-        res.redirect('/profile');
+        res.redirect('/');
     });
 });
 
@@ -178,7 +115,7 @@ router.post('/register', function(req, res) {
     }
 });
 
-router.get('/profile', requireLogin, function(req, res) {
+router.get('/', requireLogin, function(req, res) {
     let value = req.session.entry.trustvalue;
     let config = {
         "document" : "disabled"
@@ -208,10 +145,10 @@ router.post('/submit', requireLogin, function(req, res) {
     if (timeElapsed < 1000 * 60 * 3) { // time limit of 3 minutes
         req.session.entry['document'] = req.body.value;
         db.insert(req.session.entry, function(err, body) {
-            res.redirect('/profile');
+            res.redirect('/');
         });
     } else {
-        res.redirect('/profile');
+        res.redirect('/');
     }
 })
 
@@ -220,7 +157,7 @@ router.get('/adminprofile', function(req, res) {
     console.log(req.session.isadmin);
     console.log(req.session.user);
     if ((req.session.isadmin == false || req.session.isadmin == undefined) && (req.session.user != null || req.session.user == undefined)) {
-        return res.redirect('/profile');
+        return res.redirect('/');
     } else if (req.session.isadmin == false) {
         return res.redirect('/login');
     }

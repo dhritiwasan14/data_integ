@@ -1,11 +1,14 @@
-var express = require('express');
-var path = require('path');
-var routes = require('./routes/routes');
-var bodyParser = require('body-parser');
-var flash = require('connect-flash');
-var app = express();
-var session = require('express-session');
-var database = require('./server/db');
+const express = require('express');
+const path = require('path');
+const bodyParser = require('body-parser');
+const flash = require('connect-flash');
+const app = express();
+const session = require('express-session');
+const db = require('./server/db').getDatabase();
+const bcrypt = require('bcrypt');
+const authenticator = require('authenticator');
+
+const user = require('./routes/user');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -26,8 +29,74 @@ app.use(session({
     saveUninitialized: true
 }));
 
-// Final routes to go here after configuration otherwise config would not be captured
-app.use('/', routes);
+// User and admin routes
+app.use('/user', user);
+
+// Login and registration routes
+
+app.get('/', function(req, res) {
+    res.redirect('/login');
+});
+
+app.get('/:status(login|failed)', function(req, res) {
+    let config = {
+        "message" : ""
+    }
+    if(req.params.status === "failed") {
+        config.message = "Incorrect login credentials. Try again."
+    }
+    res.render('index', config);
+});
+
+app.post('/', function(req, res) {
+    console.log('Login attempt');
+    db.get(req.body.username, function (err, body, headers) {
+        let authenticated = false;
+        let tokenMatch = false;
+        let isAdmin = false;
+
+        // username check
+        if (err) {
+            console.log("Login: No such user found");
+            res.redirect("/failed");
+            return;
+        }
+
+        // password check
+        let hash = bcrypt.hashSync(req.body.password, body.salt);
+        if (body.password === hash) {
+            authenticated = true;
+        }
+
+        // TODO: admin check
+
+        // token check
+        let formattedToken = authenticator.generateToken(body.qrkey);
+        if (formattedToken === req.body.code) {
+            tokenMatch = true;
+        }
+
+        console.log(
+            "Login Attempt. " +
+            "authenticated: " + authenticated + ". " +
+            "tokenMatch: " + tokenMatch + ". " +
+            "isAdmin: " + isAdmin + ". "
+        )
+        
+        if (authenticated && tokenMatch) {
+            req.session.user = req.body.username;
+            if (isAdmin) {
+                res.redirect('/adminprofile');
+            } else {
+                res.redirect('/user');
+            }
+        } else {
+            res.redirect('/failed');
+        }
+    });
+});
+
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
