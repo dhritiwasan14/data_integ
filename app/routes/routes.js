@@ -4,7 +4,7 @@ var bcrypt = require('bcrypt');
 var authenticator = require('authenticator');
 var QRCode = require('qr-image');
 var bodyParser = require('body-parser');
-var face_rec2 = require('./face-rec.js');
+var face_rec2 = require('../server/face-rec.js');
 var db = require('../server/db').getDatabase();
 
 const fr = require('face-recognition');
