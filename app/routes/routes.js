@@ -111,41 +111,26 @@ router.post('/faceadd', requireLogin, function(req, res) {
     });
 });
 
-router.get('/signup', function(req, res) {
+router.get('/register', function(req, res) {
     let config = {
         "message" : ""
     }
     return res.render('register', config);
 });
 
-router.get('/profile', requireLogin, function(req, res) {
-    let value = req.session.entry.trustvalue;
-    let config = {
-        "document" : "disabled"
-    };
-    console.log("Trust value is: " + value);
-    switch(value) {
-        case 2:
-        case 1:
-            config.document = "";
-    }
-
-    res.render('profile', config);
-});
-
-router.post('/signup', function(req, res) {
+router.post('/register', function(req, res) {
     let config = {
         "message" : ""
     }
     if(req.session.valid === false) {
         config.message = "Account already exist/taken"
         req.session.valid = null;
-        return res.redirect('/signup', config);
+        return res.redirect('/register', config);
     }
     if(req.session.cpassword === false) {
         config.message = "Passwords do not match"
         req.session.cpassword = null;
-        return res.redirect('/signup', config);
+        return res.redirect('/register', config);
     }
 
     let genSalt = bcrypt.genSaltSync(saltRounds);
@@ -183,14 +168,29 @@ router.post('/signup', function(req, res) {
             } else {
                 console.log('Account exists');
                 req.session.cpassword = true;
-                res.redirect('/signup');
+                res.redirect('/register');
             }
         })
     }
     else {
         req.session.cpassword = false;
-        res.redirect('/signup');
+        res.redirect('/register');
     }
+});
+
+router.get('/profile', requireLogin, function(req, res) {
+    let value = req.session.entry.trustvalue;
+    let config = {
+        "document" : "disabled"
+    };
+    console.log("Trust value is: " + value);
+    switch(value) {
+        case 2:
+        case 1:
+            config.document = "";
+    }
+
+    res.render('profile', config);
 });
 
 router.get('/logout', requireLogin, function(req, res) {
@@ -214,23 +214,6 @@ router.post('/submit', requireLogin, function(req, res) {
         res.redirect('/profile');
     }
 })
-
-router.get('/showUser/:id', function (req, res) {
-    console.log(req.params.id);
-    db.get(req.params.id, function (err, body, headers) {
-        if (!err) {
-            return res.render('display_user', {
-                userid: body.username, 
-                password: body.password, 
-                qrkey: body.qrkey, 
-                salt: body.salt, 
-                document: body.document
-            })
-        } else {
-            console.log('encountered an error'+err);
-        }
-    })
-});
 
 // admin pages
 router.get('/adminprofile', function(req, res) {
@@ -256,6 +239,23 @@ router.get('/adminprofile', function(req, res) {
     });
     
     
+});
+
+router.get('/showUser/:id', function (req, res) {
+    console.log(req.params.id);
+    db.get(req.params.id, function (err, body, headers) {
+        if (!err) {
+            return res.render('display_user', {
+                userid: body.username, 
+                password: body.password, 
+                qrkey: body.qrkey, 
+                salt: body.salt, 
+                document: body.document
+            })
+        } else {
+            console.log('encountered an error'+err);
+        }
+    })
 });
 
 // helper functions
