@@ -85,7 +85,7 @@ app.post('/', function(req, res) {
             "tokenMatch: " + tokenMatch + ". " +
             "isAdmin: " + isAdmin + ". "
         )
-        
+
         if (authenticated && tokenMatch) {
             req.session.user = req.body.username;
             req.session.isadmin = isAdmin;
@@ -100,74 +100,73 @@ app.post('/', function(req, res) {
     });
 });
 
-app.get('/register/:message(.*)', function(req, res) {
-    let config = {
-        "message" : req.params.message
+app.get('/register', (req, res) => {
+    res.render('register', {"message" : ""});
+});
+
+app.get('/register/:status(notmatching|taken)', function(req, res) {
+    let message;
+    switch(req.params.status) {
+        case 'notmatching':
+            message = "Passwords do not match";
+            break;
+        case 'taken':
+            message = "Account already exist";
+            break;
+        default:
+            message = "";
     }
-    return res.render('register', config);
+
+    let config = {
+        "message" : message
+    }
+    res.render('register', config);
 });
 
 app.post('/register', function(req, res) {
-    let config = {
-        "message" : ""
+    let username = req.body.username;
+    let password = req.body.password;
+    let confirmPassword = req.body.confirmPassword;
+
+    // checks if passwords corresponds
+    if (password !== confirmPassword) {
+        console.log("Registration. Password don't match.");
+        res.redirect('/register/notmatching');
+        return;
     }
 
-    if(req.session.valid === false) {
-        config.message = "Account already exist/taken"
-        req.session.valid = null;
-        return res.redirect('/register', config);
-    }
+    db.get(username, (err, body) => {
+        // checks if username already exists
+        if (!err) {
+            console.log("Registration. Username taken.");
+            res.redirect('/register/taken');
+            return;
+        }
 
-    if(req.session.cpassword === false) {
-        config.message = "Passwords do not match"
-        req.session.cpassword = null;
-        return res.redirect('/register', config);
-    }
+        const saltRounds = 10;
+        let genSalt = bcrypt.genSaltSync(saltRounds);
+        var hash = bcrypt.hashSync(password, genSalt);
 
-    const saltRounds = 10;
-    let genSalt = bcrypt.genSaltSync(saltRounds);
-    var hash = bcrypt.hashSync(req.body.password, genSalt);
-    var formattedKey = authenticator.generateKey();
-    
-    var uri = authenticator.generateTotpUri(formattedKey, req.body.username, "KYC IBM", 'SHA1', 6, 30);
-    console.log(uri);
-    
-    var tag2 = QRCode.imageSync(uri, {type: 'svg', size: 10});
-    if (req.body.password === req.body.confirmPassword) {
-        console.log(req.body);
-        
-        // must check if database contains entry
-        db.get(req.body.username, function(err, body, headers)  {
-            req.session.valid = false;
-            req.session.cpassword = false;
-            if (err) {
-                let entry = {
-                    "username": req.body.username,
-                    "password": hash,
-                    "qrkey": formattedKey,
-                    "salt": genSalt,
-                    "trustvalue": 0
-                };
-                db.insert(entry, req.body.username, function (err, body, headers) {
-                    console.log("trying to add user info");
-                    if (!err) {
-                        req.session.valid = true;
-                        return res.render('setup-2fa', {
-                            qr: tag2
-                        });
-                    }
-                })
-            } else {
-                console.log('Account exists');
-                req.session.cpassword = true;
-                res.redirect('/register');
+        var formattedKey = authenticator.generateKey();
+        var uri = authenticator.generateTotpUri(formattedKey, username, "KYC IBM", 'SHA1', 6, 30);
+        var tag2 = QRCode.imageSync(uri, {type: 'svg', size: 10});
+
+        let entry = {
+            "username": username,
+            "password": hash,
+            "qrkey": formattedKey,
+            "salt": genSalt,
+            "trustvalue": 0
+        };
+        db.insert(entry, username, function (err, body, headers) {
+            if (!err) {
+                console.log("Registration. Added " + username);
+                res.render('setup-2fa', {
+                    qr: tag2
+                });
             }
-        })
-    }
-    else {
-        req.session.cpassword = false;
-        res.redirect('/register');
-    }
+        });
+    });
 });
 
 // catch 404 and forward to error handler
