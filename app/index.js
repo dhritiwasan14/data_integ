@@ -13,7 +13,7 @@ const QRCode = require('qr-image');
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-app.use(express.static(__dirname + '/public'));
+app.use(express.static(path.join(__dirname, '/public')));
 app.use(bodyParser.json({ limit: '5mb', extended: false }));
 app.use(bodyParser.urlencoded({ limit: '5mb', extended: false }));
 app.use(bodyParser.text({limit : '1mb'}));
@@ -34,7 +34,7 @@ const user = require('./routes/user');
 const admin = require('./routes/admin');
 
 app.use('/user', user);
-app.user('/admin', admin);
+app.use('/admin', admin);
 
 // Login and registration routes
 app.get('/', function(req, res) {
@@ -124,7 +124,7 @@ app.post('/register', function(req, res) {
         return res.redirect('/register', config);
     }
 
-    let saltRounds = 10;
+    const saltRounds = 10;
     let genSalt = bcrypt.genSaltSync(saltRounds);
     var hash = bcrypt.hashSync(req.body.password, genSalt);
     var formattedKey = authenticator.generateKey();

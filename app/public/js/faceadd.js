@@ -26,7 +26,7 @@ window.onload = () => {
             let reader = new FileReader();
             reader.onloadend = (event) => {
                 let xhttp = new XMLHttpRequest();
-                xhttp.open("POST", "faceadd", true);
+                xhttp.open("POST", "/user/faceadd", true);
                 xhttp.setRequestHeader("Content-type", "text/plain;charset=utf8");
                 xhttp.send(reader.result);
             };
