@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const QRCode = require('qr-image');
 const face_rec2 = require('../server/face-rec.js');
 const db = require('../server/db').getDatabase();
 
@@ -46,73 +45,6 @@ router.post('/faceadd', requireLogin, function(req, res) {
     db.insert(req.session.entry, function(err, body, header) {
         res.redirect('/');
     });
-});
-
-router.get('/register', function(req, res) {
-    let config = {
-        "message" : ""
-    }
-    return res.render('register', config);
-});
-
-router.post('/register', function(req, res) {
-    let config = {
-        "message" : ""
-    }
-    if(req.session.valid === false) {
-        config.message = "Account already exist/taken"
-        req.session.valid = null;
-        return res.redirect('/register', config);
-    }
-    if(req.session.cpassword === false) {
-        config.message = "Passwords do not match"
-        req.session.cpassword = null;
-        return res.redirect('/register', config);
-    }
-
-    let genSalt = bcrypt.genSaltSync(saltRounds);
-    var hash = bcrypt.hashSync(req.body.password, genSalt);
-    var formattedKey = authenticator.generateKey();
-    
-    var uri = authenticator.generateTotpUri(formattedKey, req.body.username, "KYC IBM", 'SHA1', 6, 30);
-    console.log(uri);
-    
-    var tag2 = QRCode.imageSync(uri, {type: 'svg', size: 10});
-    if (req.body.password === req.body.confirmPassword) {
-        console.log(req.body);
-        
-        // must check if database contains entry
-        db.get(req.body.username, function(err, body, headers)  {
-            req.session.valid = false;
-            req.session.cpassword = false;
-            if (err) {
-                let entry = {
-                    "username": req.body.username,
-                    "password": hash,
-                    "qrkey": formattedKey,
-                    "salt": genSalt,
-                    "trustvalue": 0
-                };
-                db.insert(entry, req.body.username, function (err, body, headers) {
-                    console.log("trying to add user info");
-                    if (!err) {
-                        req.session.valid = true;
-                        return res.render('setup-2fa', {
-                            qr: tag2
-                        });
-                    }
-                })
-            } else {
-                console.log('Account exists');
-                req.session.cpassword = true;
-                res.redirect('/register');
-            }
-        })
-    }
-    else {
-        req.session.cpassword = false;
-        res.redirect('/register');
-    }
 });
 
 router.get('/', requireLogin, function(req, res) {
