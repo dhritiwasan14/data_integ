@@ -30,7 +30,8 @@ function requireLogin(req, res, next) {
 }
 
 function sufficientlyTrusted(req, value) {
-    let trustValue = req.session.entry.trustValue;
+    let trustValue = req.session.trustvalue;
+    console.log(trustValue);
     return trustValue >= value;
 }
 
@@ -58,22 +59,12 @@ router.get('/faceadd', requireLogin, function(req, res) {
 })
 
 router.get('/signup', function(req, res) {
-    let config = {
-        "message" : ""
-    }
-    if(req.session.valid === false) {
-        config.message = "Account already exist/taken"
-        req.session.valid = null;
-    }
-    if(req.session.cpassword === false) {
-        config.message = "Passwords do not match"
-        req.session.cpassword = null;
-    }
+    
     return res.render('register', config);
 });
 
 router.get('/profile', requireLogin, function(req, res) {
-    let value = req.session.entry.trustvalue;
+    let value = req.session.trustvalue;
     let config = {
         "document" : "disabled"
     };
@@ -137,6 +128,7 @@ router.post('/', function(req, res) {
                     }
 
                     req.session.authenticated = true;
+                    req.session.trustvalue = body.trustvalue;
                 }
                 else {
                     console.log('Invalid token number used');
@@ -186,6 +178,20 @@ router.get('/adminprofile', function(req, res) {
 });
 
 router.post('/signup', function(req, res) {
+    let config = {
+        "message" : ""
+    }
+    if(req.session.valid === false) {
+        config.message = "Account already exist/taken"
+        req.session.valid = null;
+        return res.redirect('/signup');
+    }
+    if(req.session.cpassword === false) {
+        config.message = "Passwords do not match"
+        req.session.cpassword = null;
+        return res.redirect('/signup');
+    }
+
     let genSalt = bcrypt.genSaltSync(saltRounds);
     var hash = bcrypt.hashSync(req.body.password, genSalt);
     var formattedKey = authenticator.generateKey();
@@ -213,21 +219,15 @@ router.post('/signup', function(req, res) {
                     console.log("trying to add user info");
                     if (!err) {
                         req.session.valid = true;
-                        
+                        return res.render('setup-2fa', {
+                            qr: tag2
+                        });
                     }
                 })
             } else {
                 console.log('Account exists');
-            }
-
-            if (req.session.valid) {
-                return res.render('setup-2fa', {
-                    qr: tag2
-                });
-            } else {
                 req.session.cpassword = true;
                 res.redirect('/signup');
-                
             }
         })
     }
