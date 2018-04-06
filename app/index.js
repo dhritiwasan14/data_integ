@@ -10,8 +10,6 @@ const bcrypt = require('bcrypt');
 const authenticator = require('authenticator');
 const QRCode = require('qr-image');
 
-const user = require('./routes/user');
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -32,7 +30,11 @@ app.use(session({
 }));
 
 // User and admin routes
+const user = require('./routes/user');
+const admin = require('./routes/admin');
+
 app.use('/user', user);
+app.user('/admin', admin);
 
 // Login and registration routes
 app.get('/', function(req, res) {
@@ -86,6 +88,7 @@ app.post('/', function(req, res) {
         
         if (authenticated && tokenMatch) {
             req.session.user = req.body.username;
+            req.session.isadmin = isAdmin;
             if (isAdmin) {
                 res.redirect('/adminprofile');
             } else {
@@ -97,14 +100,14 @@ app.post('/', function(req, res) {
     });
 });
 
-router.get('/register/:message(.*)', function(req, res) {
+app.get('/register/:message(.*)', function(req, res) {
     let config = {
         "message" : req.params.message
     }
     return res.render('register', config);
 });
 
-router.post('/register', function(req, res) {
+app.post('/register', function(req, res) {
     let config = {
         "message" : ""
     }
