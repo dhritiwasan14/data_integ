@@ -7,7 +7,6 @@ window.onload = () => {
   
   let video = document.getElementById('input');
   let output = document.getElementById('output');
-  output.height = 600;
 
   let captureBtn = document.getElementById('captureBtn');
   let submitBtn = document.getElementById('submitBtn');
@@ -19,6 +18,7 @@ window.onload = () => {
     video.srcObject = stream;
     video.play();
     output.height = video.height;
+    
 
     let vs = stream.getVideoTracks()[0];
     imageCapture = new ImageCapture(vs);
@@ -39,8 +39,11 @@ window.onload = () => {
       let img = new Image();
       img.onload = () => {
         let context = output.getContext('2d');
+        context.scale(0.5, 0.5);
         context.clearRect(0, 0, output.width, output.height);
         output.height = img.height;
+        output.width = img.width;
+        context.scale(0.5, 0.5);
         context.drawImage(img, 0, 0);
         photoTaken = true;
       }

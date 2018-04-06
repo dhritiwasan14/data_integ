@@ -30,7 +30,7 @@ function requireLogin(req, res, next) {
 }
 
 function sufficientlyTrusted(req, value) {
-    let trustValue = req.session.trustvalue;
+    let trustValue = req.session.entry.trustvalue;
     console.log(trustValue);
     return trustValue >= value;
 }
@@ -59,12 +59,14 @@ router.get('/faceadd', requireLogin, function(req, res) {
 })
 
 router.get('/signup', function(req, res) {
-    
+    let config = {
+        "message" : ""
+    }
     return res.render('register', config);
 });
 
 router.get('/profile', requireLogin, function(req, res) {
-    let value = req.session.trustvalue;
+    let value = req.session.entry.trustvalue;
     let config = {
         "document" : "disabled"
     };
@@ -128,7 +130,7 @@ router.post('/', function(req, res) {
                     }
 
                     req.session.authenticated = true;
-                    req.session.trustvalue = body.trustvalue;
+                    
                 }
                 else {
                     console.log('Invalid token number used');
@@ -184,12 +186,12 @@ router.post('/signup', function(req, res) {
     if(req.session.valid === false) {
         config.message = "Account already exist/taken"
         req.session.valid = null;
-        return res.redirect('/signup');
+        return res.redirect('/signup', config);
     }
     if(req.session.cpassword === false) {
         config.message = "Passwords do not match"
         req.session.cpassword = null;
-        return res.redirect('/signup');
+        return res.redirect('/signup', config);
     }
 
     let genSalt = bcrypt.genSaltSync(saltRounds);
