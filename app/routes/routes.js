@@ -75,7 +75,7 @@ router.post('/', function(req, res) {
 
 router.get('/facerec', requireLogin, function (req, res) {
     if (sufficientlyTrusted(req, 1)) {
-        res.render('verify_face');
+        res.render('facerec');
     } else {
         res.redirect('profile');
     }
@@ -91,7 +91,7 @@ router.post('/facerec', requireLogin, function(req, res) {
             res.redirect('submit');
         } else {
             console.log('facial recognition failed');
-            res.redirect('verify_face');
+            res.redirect('facerec');
         }
     } catch (err) {
         console.log(err);
@@ -99,7 +99,7 @@ router.post('/facerec', requireLogin, function(req, res) {
 });
 
 router.get('/faceadd', requireLogin, function(req, res) {
-    return res.render('face');
+    return res.render('faceadd');
 })
 
 router.post('/faceadd', requireLogin, function(req, res) {
