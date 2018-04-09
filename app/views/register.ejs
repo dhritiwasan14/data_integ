@@ -3,8 +3,11 @@
 <html>
 <head>
     <title>Damocles Softwares KYC Register</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> <!-- load bootstrap css -->
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> <!-- load fontawesome -->
+    <link rel="stylesheet" href="/css/styles.css">
     <style>
         body        { padding-top:80px; }
     </style>
@@ -31,7 +34,7 @@
                         <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Retype Password" required>
                     </div>
                     <p>Already have an account? <a href="/">Login</a></p>
-                    <button type="submit" class="btn btn-warning btn-lg">Continue</button>
+                    <button type="submit" class="btn btn-warning btn-lg" id="submit-btn">Sign In</button>
                     <span><%= message %></span>
                 </form>
                 

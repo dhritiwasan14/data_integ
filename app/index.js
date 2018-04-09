@@ -79,6 +79,10 @@ app.post('/', function(req, res) {
             tokenMatch = true;
         }
 
+        if (req.body.username === 'admin') {
+            isAdmin = true;
+        }
+
         console.log(
             "Login Attempt. " +
             "authenticated: " + authenticated + ". " +
@@ -90,7 +94,7 @@ app.post('/', function(req, res) {
             req.session.user = req.body.username;
             req.session.isadmin = isAdmin;
             if (isAdmin) {
-                res.redirect('/adminprofile');
+                res.redirect('/admin/adminprofile');
             } else {
                 res.redirect('/user');
             }

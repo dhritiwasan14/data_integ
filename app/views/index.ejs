@@ -3,8 +3,11 @@
 <html>
 <head>
     <title>Damocles Softwares KYC Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> <!-- load bootstrap css -->
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> <!-- load fontawesome -->
+    <link rel="stylesheet" href="/css/styles.css">
     <style>
         body        { padding-top:80px; }
     </style>
@@ -36,7 +39,7 @@
                 <div class="form-group">
                     <a href="/register">Create an account</a>
                 </div>
-                <button type="submit" class="btn btn-warning btn-lg">Login</button>
+                <button type="submit" class="btn btn-warning btn-lg" id="submit-btn">Login</button>
                 <span><%= message %></span>
             </form>
         </div>
