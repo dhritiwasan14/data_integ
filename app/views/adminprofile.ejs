@@ -9,7 +9,7 @@
                     <!-- <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button> -->
                     <ul>
                         <% if (users[i]["id"] != "admin") { %>
-                            <a href="/showUser/<%= users[i]['id'] %>"><li><%= users[i]["id"] %></li></a>
+                            <a href="/admin/showUser/<%= users[i]['id'] %>"><li><%= users[i]["id"] %></li></a>
                         <% } %>
                     </ul>
                 </div>

@@ -97,7 +97,7 @@ router.get('/submit', function(req, res) {
 router.post('/submit', function(req, res) {
     let timeElapsed = Date.now() - req.session.time;
     if (timeElapsed < 1000 * 60 * 3) { // time limit of 3 minutes
-        req.session.entry['document'] = req.body.value;
+        req.session.entry['document'] = req.body.image;
         db.insert(req.session.entry, function(err, body) {
             res.redirect('/user');
         });

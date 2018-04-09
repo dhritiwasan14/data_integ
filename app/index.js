@@ -71,8 +71,6 @@ app.post('/', function(req, res) {
             authenticated = true;
         }
 
-        // TODO: admin check
-
         // token check
         let formattedToken = authenticator.generateToken(body.qrkey);
         if (formattedToken === req.body.code) {
