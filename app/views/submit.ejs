@@ -2,33 +2,47 @@
 <html lang="en">
 <head>
     <%- include("partials/head"); %>
+    <%- include("partials/footer"); %>
     <script src="/js/submit.js"></script>
 </head>
 <body>
-    <form method="POST" id="form">
-        <div class="container">
-            <div class="row align-items-start">
-                <div class="col-lg-6">
-                    <div class="row">
-                        <video id="input" class="col-lg-12"></video>
-                    </div>
-                    <div class="row justify-content-center">
-                        <button id="captureBtn" class="col-lg-3 btn btn-primary">Capture</button>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <canvas id="output"></canvas>
-                        </div>
-                    </div>
-                    <div class="row justify-content-center">
-                        <button id="submitBtn" class="col-lg-3 btn btn-primary">Submit</button>
-                    </div>
-                </div>
+    <form method="POST" style="display:none">
+        <input name="image"></input>
+    </form>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-auto">
+                <video autoplay id="webcam" class="border border-dark"></video>
             </div>
         </div>
-    </form>
+        <div class = "row justify-content-center"> 
+            <div class = "col-md-auto">
+                <button id="capture" class="btn btn-lg">Capture</button>
+            </div>
+            <div class = "col-md-auto">
+                <button id="retake" class="btn btn-lg">Retake</button>
+            </div>
+            <div class = "col-md-auto">
+                <button id="submit" class="btn btn-lg">Submit</button>
+            </div>
+        </div>
+        </div>
 </body>
 </html>
 
+<style>
+    #webcam {
+        width: 50%;
+        display: block;
+        margin: auto auto;
+        margin-top: 5em;
+        border: transparent;
+    }
+
+    button {
+        width: fit-content;
+        margin-top: 5em;
+        padding: 2em;
+    }
+</style>

@@ -1,6 +1,6 @@
 window.onload = () => {
     let video = document.getElementById('camdemo');
-    let verifyBtn = document.getElementById('verify');
+    let verifyBtn = document.getElementById('verify-btn face');
     let form = document.getElementById('loginform');
     
     

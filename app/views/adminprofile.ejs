@@ -1,21 +1,40 @@
-<% include partials/head.ejs %>
+<% include partials/head.1.ejs %>
 
-<div class="container profile-page">
+<link rel="stylesheet" href="/css/styles.css">
+<!--<div class="container profile-page">
     <div class="row">
         <div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4 logout-panel">
             <h1>User Accounts</h1>
             <% for (var i = 0; i < users.length; i++) { %>
                 <div class="alert alert-danger alert-dismissible" role="alert">
-                    <!-- <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button> -->
-                    <ul>
+                    <! <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button> -->
+                    <!--<ul>
                         <% if (users[i]["id"] != "admin") { %>
-                            <a href="/showUser/<%= users[i]['id'] %>"><li><%= users[i]["id"] %></li></a>
+                            <a href="/admin/showUser/<%= users[i]['id'] %>"><li><%= users[i]["id"] %></li></a>
                         <% } %>
                     </ul>
                 </div>
             <% } %>
         </div>
     </div>
-</div>
+</div> -->
+<div class = "user-info">
+        <h2 class = "header user-info">User Accounts:</h2>
 
+        <hr class = "header-hr">
+
+        <div class = "user block">
+            <table border="1" class = "table table-hover"> 
+                
+                <% for (var i = 0; i < users.length; i++) { %>
+                    <% if (users[i]["id"] != "admin") { %>
+                    <tr>
+                            <td><%= users[i]["id"] %></td>
+                            <td class = "button-link"><a href="/admin/showUser/<%= users[i]['id'] %>">View</a></td>
+                    </tr>
+                    <% } %>
+                <% } %>
+              </table>
+        </div>
+    </div>
 <script src="display_user.js"></script>
