@@ -30,6 +30,7 @@ router.use((req, res, next) => {
     }
 });
 
+
 // routes
 router.get('/facerec', function (req, res) {
     if (sufficientlyTrusted(req, 1)) {
@@ -38,6 +39,22 @@ router.get('/facerec', function (req, res) {
         res.redirect('/');
     }
 });
+
+
+router.get('/profile', function (req, res) {
+    db.get(req.session.user, function (err, body, header) {
+        if (err) {
+            res.redirect('/');
+        } else {
+            console.log(body);
+            res.render('main', {
+                entry: body
+            });
+        }
+    })
+    
+})
+
 
 router.post('/facerec', function(req, res) {
     console.log('testing image');

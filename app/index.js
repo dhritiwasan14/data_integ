@@ -158,7 +158,10 @@ app.post('/register', function(req, res) {
             "password": hash,
             "qrkey": formattedKey,
             "salt": genSalt,
-            "trustvalue": 0
+            "trustvalue": 0, 
+            "country":req.body.country, 
+            "phone": req.body.phone, 
+            "name": req.body.name
         };
         db.insert(entry, username, function (err, body, headers) {
             if (!err) {

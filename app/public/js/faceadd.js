@@ -2,7 +2,7 @@
 window.onload = () => {
     let video = document.getElementById('camdemo');
     
-    let submitBtn = document.getElementById('submit');
+    let submitBtn = document.getElementById('submit-btn face');
     let imageCapture;
     
     navigator.mediaDevices.getUserMedia({ video: true, audio: false, fps: 15 })

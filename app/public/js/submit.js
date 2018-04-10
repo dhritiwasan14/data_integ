@@ -1,40 +1,42 @@
 $(document).ready(() => {
-    let webcam = $('#webcam').get(0);
 
-    setTimeout(() => {
-        alert('3 minutes elapsed. Please retry.');
-        window.location = '/user';
-    }, 1000 * 175); // redirect after 2min 55ss
+  let webcam = $('#webcam').get(0);
 
-    navigator.mediaDevices.getUserMedia({video: true, audio: false})
-        .then(stream => {
-            webcam.srcObject = stream;
-        })
-        .catch(error => {
-            // TODO: to handle this appropriately.
-            console.log('Unable to access any form of camera.');
-        });
+  setTimeout(() => {
+      alert('3 minutes elapsed. Please retry.');
+      window.location = '/user';
+  }, 1000 * 175); // redirect after 2min 55ss
 
-    $('#capture').click(event => {
-        webcam.pause();
-    });
+  navigator.mediaDevices.getUserMedia({video: true, audio: false})
+      .then(stream => {
+          webcam.srcObject = stream;
+      })
+      .catch(error => {
+          // TODO: to handle this appropriately.
+          console.log('Unable to access any form of camera.');
+      });
 
-    $('#retake').click(event => {
-        webcam.play();
-    });
+  $('#capture').click(event => {
+      webcam.pause();
+  });
 
-    $('#submit').click(event => {
-        if (!webcam.paused) {
-            alert('No photo has been captured!');
-            return;
-        }
+  $('#retake').click(event => {
+      webcam.play();
+  });
 
-        let canvas = document.createElement('canvas');
-        canvas.height = webcam.videoHeight;
-        canvas.width = webcam.videoWidth;
-        canvas.getContext('2d').drawImage(webcam, 0, 0, canvas.width, canvas.height);
+  $('#submit').click(event => {
+      if (!webcam.paused) {
+          alert('No photo has been captured!');
+          return;
+      }
 
-        $('input').val(canvas.toDataURL('image/jpeg', 1.0));
-        $('form').submit();
-    });
+      let canvas = document.createElement('canvas');
+      canvas.height = webcam.videoHeight;
+      canvas.width = webcam.videoWidth;
+      canvas.getContext('2d').drawImage(webcam, 0, 0, canvas.width, canvas.height);
+
+      $('input').val(canvas.toDataURL('image/jpeg', 1.0));
+      $('form').submit();
+      alert('Documents have been successfully submitted.')
+  });
 })
