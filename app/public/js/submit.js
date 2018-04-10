@@ -1,4 +1,5 @@
 $(document).ready(() => {
+
   let webcam = $('#webcam').get(0);
 
   setTimeout(() => {
