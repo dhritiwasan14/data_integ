@@ -105,8 +105,9 @@ function predictIndividual(image) {
         const load = loadBase64(image);
 
         var detectedFace = detector.detectFaces(load, 200);
-        if (detectedFace.length < 1) {
-            console.log('No face detected');
+        if (detectedFace.length < 1 || detectedFace.length > 1) {
+            console.log('No face detected/Multiple face detected');
+            return null;
         } else {
             const bestPrediction = recognizer.predictBest(detectedFace[0]);
             console.log(bestPrediction);
@@ -114,7 +115,7 @@ function predictIndividual(image) {
             if (bestPrediction.distance < 0.3) {
                 return bestPrediction.className;
             } else {
-                return 'Not able to verify';
+                return null;
             }
 
         }

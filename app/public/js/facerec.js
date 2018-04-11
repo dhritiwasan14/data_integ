@@ -21,7 +21,6 @@ window.onload = () => {
     })
 
     function verify(event) {
-        console.log('i do come here');
         imageCapture.takePhoto()
         .then(blob => {
             let reader = new FileReader();

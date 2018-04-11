@@ -10,7 +10,6 @@ const fs = require('fs');
 // helper functions
 function sufficientlyTrusted(req, value) {
     let trustValue = req.session.entry.trustvalue;
-    console.log(trustValue);
     return trustValue >= value;
 }
 
@@ -34,10 +33,14 @@ router.use((req, res, next) => {
 // routes
 router.get('/facerec', function (req, res) {
     if (sufficientlyTrusted(req, 1)) {
-        res.render('facerec');
+        res.render('facerec', { 'message': '' });
     } else {
         res.redirect('/');
     }
+});
+
+router.get('/facerec/failed', function (req, res) {
+    res.render('facerec', { 'message': 'An error has occurred. Please ensure there is only one face taken' });
 });
 
 
@@ -46,7 +49,6 @@ router.get('/profile', function (req, res) {
         if (err) {
             res.redirect('/');
         } else {
-            console.log(body);
             res.render('main', {
                 entry: body
             });
@@ -59,32 +61,35 @@ router.get('/profile', function (req, res) {
 router.post('/facerec', function (req, res) {
     console.log('testing image');
     var bestPrediction = face_rec2.predictIndividual(req.body.value);
-    try {
-        if (bestPrediction === req.session.user) {
-            req.session.time = Date.now();
-            console.log('face matched');
-            res.redirect('/user/submit');
-        } else {
-            console.log('facial recognition failed');
-            res.redirect('/user/facerec');
+    if (bestPrediction == null) {
+        res.redirect('/user/facerec/failed');
+    } else {
+        try {
+            if (bestPrediction === req.session.user) {
+                req.session.time = Date.now();
+                console.log('face matched');
+                res.redirect('/user/submit');
+            } else {
+                console.log('facial recognition failed');
+                res.redirect('/user/facerec');
+            }
+        } catch (err) {
+            console.log(err);
         }
-    } catch (err) {
-        console.log(err);
     }
 });
 
-router.get('/faceadd', function(req, res) {
-    res.render('faceadd', {'message': ''});
+router.get('/faceadd', function (req, res) {
+    res.render('faceadd', { 'message': '' });
 });
 
 router.get('/faceadd/failed', function (req, res) {
-    res.render('faceadd', {'message' : 'No face/multiple faces detected, please try again'});
+    res.render('faceadd', { 'message': 'No face/multiple faces detected, please try again' });
 });
 
 router.post('/faceadd', function (req, res) {
     console.log('starting training');
     var modelState = face_rec2.trainSingle(req.session.user, req.body.image);
-    console.log(modelState);
     if (Object.keys(modelState).length === 0) {
         res.redirect('/user/faceadd/failed');
     } else {
