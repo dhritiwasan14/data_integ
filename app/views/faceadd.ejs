@@ -17,14 +17,16 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-        <%- include("partials/head"); %>
+    <%- include("partials/head"); %>
         <%- include("partials/footer"); %>
-        <!-- <link rel="stylesheet" href="/css/stylecamera.css">
+            <!-- <link rel="stylesheet" href="/css/stylecamera.css">
         <link rel="stylesheet" href="/css/styles.css"> -->
 </head>
+
 <body>
-    <h4 class = "header-face">Align your face with the camera and click the submit button</h4>
+    <h4 class="header-face">Align your face with the camera and click the submit button</h4>
     <!-- <form method="post" id = "loginform">
         <video id="camdemo" style="width: 640px; height: 480px; text-align: center; margin: 0 auto;"></video>
         
@@ -33,18 +35,29 @@
         
         </form> -->
 
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-auto">
-                    <video id="camdemo" style="width: 640px; height: 480px; text-align: center; margin: 0 auto;"></video>
-                </div>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-auto">
+                <video id="camdemo" style="width: 640px; height: 480px; text-align: center; margin: 0 auto;"></video>
             </div>
-            <div class = "row justify-content-center"> 
-                <div class = "col-md-auto">
-                    <input type="button" class = "btn btn-lg" id="submit-btn face" value="Submit Facial-ID" />
-                </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-auto">
+                <form method="POST" id='form' action="/user/faceadd" style="display:none">
+                    <input id="input" name="image" />
+                </form>
+                <input type="button" class="btn btn-lg" id="submit-btn face" value="Submit Facial-ID" />
             </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-auto">
+                <span class="text-danger">
+                    <%= message %>
+                </span>
             </div>
+        </div>
+    </div>
 </body>
 <script src="/js/faceadd.js"></script>
+
 </html>

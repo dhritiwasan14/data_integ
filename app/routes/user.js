@@ -17,7 +17,7 @@ function sufficientlyTrusted(req, value) {
 // middleware
 router.use((req, res, next) => {
     if (req.session && req.session.user) {
-        db.get(req.session.user, function(err, body, header) {
+        db.get(req.session.user, function (err, body, header) {
             if (err) {
                 res.redirect('/');
             } else {
@@ -52,11 +52,11 @@ router.get('/profile', function (req, res) {
             });
         }
     })
-    
+
 })
 
 
-router.post('/facerec', function(req, res) {
+router.post('/facerec', function (req, res) {
     console.log('testing image');
     var bestPrediction = face_rec2.predictIndividual(req.body.value);
     try {
@@ -74,25 +74,34 @@ router.post('/facerec', function(req, res) {
 });
 
 router.get('/faceadd', function(req, res) {
-    return res.render('faceadd');
-})
-
-router.post('/faceadd', function(req, res) {
-    console.log('starting training');
-    var modelState = face_rec2.trainSingle(req.session.user, req.body);
-    req.session.entry.trustvalue = 1;
-    db.insert(req.session.entry, function(err, body, header) {
-        res.redirect('/user');
-    });
+    res.render('faceadd', {'message': ''});
 });
 
-router.get('/', function(req, res) {
+router.get('/faceadd/failed', function (req, res) {
+    res.render('faceadd', {'message' : 'No face/multiple faces detected, please try again'});
+});
+
+router.post('/faceadd', function (req, res) {
+    console.log('starting training');
+    var modelState = face_rec2.trainSingle(req.session.user, req.body.image);
+    console.log(modelState);
+    if (Object.keys(modelState).length === 0) {
+        res.redirect('/user/faceadd/failed');
+    } else {
+        req.session.entry.trustvalue = 1;
+        db.insert(req.session.entry, function (err, body, header) {
+            res.redirect('/user');
+        });
+    }
+});
+
+router.get('/', function (req, res) {
     let value = req.session.entry.trustvalue;
     let config = {
-        "document" : "disabled"
+        "document": "disabled"
     };
     console.log("Trust value is: " + value);
-    switch(value) {
+    switch (value) {
         case 2:
         case 1:
             config.document = "";
@@ -101,21 +110,21 @@ router.get('/', function(req, res) {
     res.render('profile', config);
 });
 
-router.get('/logout', function(req, res) {
+router.get('/logout', function (req, res) {
     req.session.regenerate((err) => {
         res.redirect('/');
     })
 });
 
-router.get('/submit', function(req, res) {
+router.get('/submit', function (req, res) {
     return res.render('submit');
 })
 
-router.post('/submit', function(req, res) {
+router.post('/submit', function (req, res) {
     let timeElapsed = Date.now() - req.session.time;
     if (timeElapsed < 1000 * 60 * 3) { // time limit of 3 minutes
         req.session.entry['document'] = req.body.image;
-        db.insert(req.session.entry, function(err, body) {
+        db.insert(req.session.entry, function (err, body) {
             res.redirect('/user');
         });
     } else {

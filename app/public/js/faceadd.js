@@ -21,17 +21,22 @@ window.onload = () => {
     })
     
     function submit(event) {
+        event.preventDefault();
         imageCapture.takePhoto()
         .then(blob => {
             let reader = new FileReader();
             reader.onloadend = (event) => {
-                let xhttp = new XMLHttpRequest();
+                let imageinput = document.getElementById('input');
+                imageinput.value = reader.result;
+                let form = document.getElementById('form');
+                form.submit();
+
+                /* let xhttp = new XMLHttpRequest();
                 xhttp.open("POST", "/user/faceadd", true);
                 xhttp.setRequestHeader("Content-type", "text/plain;charset=utf8");
-                xhttp.send(reader.result);
+                xhttp.send(reader.result); */
             };
             reader.readAsDataURL(blob);
-            
         })
         .catch(err => {
             console.log(err);
