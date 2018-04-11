@@ -5,11 +5,11 @@ const db = require('../server/db').getDatabase();
 router.get('/adminprofile', function(req, res) {
     console.log(req.session.isadmin);
     console.log(req.session.user);
-    if ((req.session.isadmin == false || req.session.isadmin == undefined) && (req.session.user != null || req.session.user == undefined)) {
-        return res.redirect('/');
-    } else if (req.session.isadmin == false) {
-        return res.redirect('/login');
-    }
+    // if ((req.session.isadmin == false || req.session.isadmin == undefined) && (req.session.user != null || req.session.user == undefined)) {
+    //     return res.redirect('/');
+    // } else if (req.session.isadmin == false) {
+    //     return res.redirect('/login');
+    // }
     var users = [];
     db.list(function(errnew, bodynew) {
         var users = [];
@@ -30,16 +30,21 @@ router.get('/showUser/:id', function (req, res) {
     db.get(req.params.id, function (err, body, headers) {
         if (!err) {
             return res.render('display_user', {
-                userid: body.username, 
-                password: body.password, 
-                qrkey: body.qrkey, 
-                salt: body.salt, 
+                name: body.name, 
+                username: body.username, 
+                country: body.country, 
+                phone: body.phone, 
+                trustvalue: body.trustvalue, 
                 document: body.document
             })
         } else {
             console.log('encountered an error'+err);
         }
     })
+});
+
+router.post('/showUser/:id', function (req, res) {
+    console.log(req.body);
 });
 
 module.exports = router;

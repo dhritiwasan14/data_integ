@@ -71,8 +71,6 @@ app.post('/', function(req, res) {
             authenticated = true;
         }
 
-        // TODO: admin check
-
         // token check
         let formattedToken = authenticator.generateToken(body.qrkey);
         if (formattedToken === req.body.code) {
@@ -160,7 +158,10 @@ app.post('/register', function(req, res) {
             "password": hash,
             "qrkey": formattedKey,
             "salt": genSalt,
-            "trustvalue": 0
+            "trustvalue": 0, 
+            "country":req.body.country, 
+            "phone": req.body.phone, 
+            "name": req.body.name
         };
         db.insert(entry, username, function (err, body, headers) {
             if (!err) {
@@ -204,5 +205,5 @@ app.use(function(err, req, res, next) {
     });
 });
 
-app.listen(3000);
+app.listen(3000, '127.0.0.1');
 console.log('Server initialized');

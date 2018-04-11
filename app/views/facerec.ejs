@@ -1,17 +1,35 @@
-<!--You can change the dimensions of the camera with height and weight, (text align and margin is just for center the image)-->
-<link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet">
-<link rel="stylesheet" href="/css/stylecamera.css">
-
-<form method="post" id = "loginform">
-    <video id="camdemo" style="width: 640px; height: 480px; text-align: center; margin: 0 auto;"></video>
-<!-- <div style="text-align:center;">
-    <input type="button" id="start" value="Start / Shut down camera" />
-    <input type="button" id="savefile" value="Save photo" />
-</div> -->
-    <input type="text" name="value" id="value" hidden=true/>
-        <!-- <button type="submit" id="verify"> Verify Face </button> -->
-    <input type="button" id="verify" value="Verify face" />
-
-</form>
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <%- include("partials/head"); %>
+        <%- include("partials/footer"); %>
+        <!-- <link rel="stylesheet" href="/css/stylecamera.css">
+        <link rel="stylesheet" href="/css/styles.css"> -->
+</head>
+<body>
+    <h4 class = "header-face">Align your face with the camera and click the submit button</h4>
+    <!-- <form method="post" id = "loginform">
+        <video id="camdemo" style="width: 640px; height: 480px; text-align: center; margin: 0 auto;"></video>
+        
+        
+        <input type="button" class = "btn btn-lg" id="submit-btn face" value="Submit Facial-ID" />
+        
+        </form> -->
+        <form method="post" id = "loginform">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-auto">
+                    <video id="camdemo" style="width: 640px; height: 480px; text-align: center; margin: 0 auto;"></video>
+                </div>
+            </div>
+            <div class = "row justify-content-center"> 
+                <div class = "col-md-auto">
+                    <input type="text" name="value" id="value" hidden=true/>
+                    <input type="button" class = "btn btn-lg" id="verify-btn face" value="Submit Facial-ID" />
+                </div>
+            </div>
+            </div>
+        </form>
+</body>
 <script src="/js/facerec.js"></script>
+</html>

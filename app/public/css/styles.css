@@ -1,0 +1,114 @@
+#submit-btn {
+    background-color: #4053af !important; 
+    border-color: #4053af;
+    color: white;
+}
+
+#submit-button:focus {
+    background-color: #4053af !important; 
+    border-color: #4053af;
+    color: white;
+    outline: none;
+}
+
+.rectangle {
+    position: absolute;
+    top: 10%;
+    left: 27%;
+    width: 40em;
+    height: 40em;
+}
+
+.rect-header {
+    text-align: center;
+    padding-top: 1em;
+}
+body {
+    width: 100%;
+}
+
+.damocles {
+    display: block;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.btn-lg:hover {
+    color: #4053af;
+    border-color: #4053af;
+    background-color: transparent;
+    
+}
+
+.btn-lg {
+    color: white;
+    background-color: #4053af;
+
+}
+
+.btn-lg:focus {
+    outline: none !important;
+}
+
+.header {
+    text-align: left;
+    margin-left: 10em;
+    padding-top: 2em;
+    
+}
+
+.header-hr {
+    margin-left: 15em;
+    margin-right: 15em;
+}
+
+.table {
+    width: 50em;
+    margin: 0 auto;
+    border: transparent;
+    margin-top: 5em;
+}
+
+.table td {
+    border-top: none;
+    border-bottom: 0.3px solid #dee2e6;
+}
+
+td {
+    padding: 2em;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 15%;
+    background-color: #f8f9fa!important;
+    text-align: center;
+    padding-top: 1em;
+}
+
+/* #face {
+    
+    display: block;
+    margin: 0 auto;
+    margin-top: 30em;
+} */
+
+.header-face {
+    text-align: center;
+    padding-top: 1em;
+}
+.button-link {
+    text-align: right;
+}
+#individual {
+    display: block;
+    margin-left: auto;
+}
+
+.side-buttons {
+    display: block;
+    margin: auto auto;
+    font-weight: 10 !important;
+}

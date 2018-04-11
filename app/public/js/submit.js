@@ -1,77 +1,42 @@
-window.onload = () => {
+$(document).ready(() => {
+
+  let webcam = $('#webcam').get(0);
 
   setTimeout(() => {
-    alert("3 minutes elapsed. Please retry.");
-    window.location.href = "/profile";
+      alert('3 minutes elapsed. Please retry.');
+      window.location = '/user';
   }, 1000 * 175); // redirect after 2min 55ss
-  
-  let video = document.getElementById('input');
-  let output = document.getElementById('output');
 
-  let captureBtn = document.getElementById('captureBtn');
-  let submitBtn = document.getElementById('submitBtn');
-  let photoTaken = false;
-  let imageCapture;
-  
-  navigator.mediaDevices.getUserMedia({ video: true, audio: false, fps: 15 })
-  .then(function(stream) {
-    video.srcObject = stream;
-    video.play();
-    output.height = video.height;
-    
+  navigator.mediaDevices.getUserMedia({video: true, audio: false})
+      .then(stream => {
+          webcam.srcObject = stream;
+      })
+      .catch(error => {
+          // TODO: to handle this appropriately.
+          console.log('Unable to access any form of camera.');
+      });
 
-    let vs = stream.getVideoTracks()[0];
-    imageCapture = new ImageCapture(vs);
-    
-    captureBtn.onclick = capture;
-    submitBtn.onclick = submit;
-  })
-  .catch(function(err) {
-    console.log(err);
-    alert('Failed to access webcam.');
+  $('#capture').click(event => {
+      webcam.pause();
   });
-  
-  function capture(event) {
-    event.preventDefault();
 
-    imageCapture.takePhoto()
-    .then(blob => {
-      let img = new Image();
-      img.onload = () => {
-        let context = output.getContext('2d');
-        context.scale(0.5, 0.5);
-        context.clearRect(0, 0, output.width, output.height);
-        output.height = img.height;
-        output.width = img.width;
-        context.scale(0.5, 0.5);
-        context.drawImage(img, 0, 0);
-        photoTaken = true;
+  $('#retake').click(event => {
+      webcam.play();
+  });
+
+  $('#submit').click(event => {
+      if (!webcam.paused) {
+          alert('No photo has been captured!');
+          return;
       }
-      img.src = URL.createObjectURL(blob);
-    })
-    .catch(err => {
-      console.log(err);
-    });
-  }
-  
-  function submit(event) {
-    event.preventDefault();
-    if (!photoTaken) {
-      alert("Please capture an image to submit");
-    } else {
-      let form = document.getElementById('form');
-      let input = document.createElement('input');
-      input.name = "value";
-      input.hidden = true;
-      input.value = output.toDataURL('image/jpeg', 1.0);
-      form.appendChild(input);
-      form.submit();
 
-      /* let imageURL = output.toDataURL('image/jpeg', 1.0);
-      console.log(imageURL.substr(0, 100));
-      let xhttp = new XMLHttpRequest();
-      xhttp.open('POST', '/documents', true);
-      xhttp.setRequestHeader('Context-type', 'text/plain;charset=utf8'); */
-    }
-  }
-}
+      let canvas = document.createElement('canvas');
+      canvas.height = webcam.videoHeight;
+      canvas.width = webcam.videoWidth;
+      canvas.getContext('2d').drawImage(webcam, 0, 0, canvas.width, canvas.height);
+
+      $('input').val(canvas.toDataURL('image/jpeg', 1.0));
+      $('form').submit();
+      alert('Documents have been successfully submitted.')
+  });
+})

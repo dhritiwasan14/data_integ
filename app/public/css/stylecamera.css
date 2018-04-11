@@ -36,9 +36,6 @@ input[type=button]{
     font-size: 16px;
     text-decoration: none;
     padding: 15px 32px;
-    position: absolute;
-    left: 50%;
-    top:70%;
 
 }
 
@@ -55,12 +52,12 @@ input[type=button]{
     left: 45%;
     top: 70%;
 }
-video {
+/* video {
     left: 50%;
     position: absolute;
     top: 30%;
     transform: translate(-50%, -50%);
-}
+} */
 
 .btn-default{
     font-family: 'Roboto Condensed', sans-serif;

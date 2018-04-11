@@ -30,6 +30,7 @@ router.use((req, res, next) => {
     }
 });
 
+
 // routes
 router.get('/facerec', function (req, res) {
     if (sufficientlyTrusted(req, 1)) {
@@ -38,6 +39,22 @@ router.get('/facerec', function (req, res) {
         res.redirect('/');
     }
 });
+
+
+router.get('/profile', function (req, res) {
+    db.get(req.session.user, function (err, body, header) {
+        if (err) {
+            res.redirect('/');
+        } else {
+            console.log(body);
+            res.render('main', {
+                entry: body
+            });
+        }
+    })
+    
+})
+
 
 router.post('/facerec', function(req, res) {
     console.log('testing image');
@@ -97,7 +114,7 @@ router.get('/submit', function(req, res) {
 router.post('/submit', function(req, res) {
     let timeElapsed = Date.now() - req.session.time;
     if (timeElapsed < 1000 * 60 * 3) { // time limit of 3 minutes
-        req.session.entry['document'] = req.body.value;
+        req.session.entry['document'] = req.body.image;
         db.insert(req.session.entry, function(err, body) {
             res.redirect('/user');
         });
