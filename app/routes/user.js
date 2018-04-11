@@ -60,7 +60,8 @@ router.get('/profile', function (req, res) {
 
 router.post('/facerec', function (req, res) {
     console.log('testing image');
-    var bestPrediction = face_rec2.predictIndividual(req.body.value);
+    var model = req.session.entry["model"];
+    var bestPrediction = face_rec2.predictIndividual(req.body.value, model);
     if (bestPrediction == null) {
         res.redirect('/user/facerec/failed');
     } else {
@@ -94,7 +95,9 @@ router.post('/faceadd', function (req, res) {
         res.redirect('/user/faceadd/failed');
     } else {
         req.session.entry.trustvalue = 1;
-        db.insert(req.session.entry, function (err, body, header) {
+        req.session.entry["face"] = req.body.image;
+        req.session.entry["model"] = modelState;
+        db.insert(req.session.entry, function (err, body) {
             res.redirect('/user');
         });
     }
