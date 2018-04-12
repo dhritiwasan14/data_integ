@@ -6,6 +6,8 @@ const db = require('../server/db').getDatabase();
 const fr = require('face-recognition');
 const path = require('path');
 const fs = require('fs');
+const authenticator = require('authenticator');
+const QRCode = require('qr-image');
 
 // helper functions
 function sufficientlyTrusted(req, value) {
@@ -60,19 +62,6 @@ router.get('/profile', function (req, res) {
 
 router.post('/facerec', function (req, res) {
     console.log('testing image');
-<<<<<<< HEAD
-    var bestPrediction = face_rec2.predictIndividual(req.body.value);
-    try {
-        console.log(bestPrediction);
-        console.log(req.session.user);
-        if (bestPrediction === req.session.user) {
-            req.session.time = Date.now();
-            console.log('face matched');
-            res.redirect('/user/submit');
-        } else {
-            console.log('facial recognition failed');
-            res.redirect('/user/facerec');
-=======
     var model = req.session.entry["model"];
     var bestPrediction = face_rec2.predictIndividual(req.body.value, model);
     if (bestPrediction == null) {
@@ -89,7 +78,6 @@ router.post('/facerec', function (req, res) {
             }
         } catch (err) {
             console.log(err);
->>>>>>> 1b414988a13303dafacf92afdb814189a8b693ad
         }
     }
 });
@@ -139,6 +127,9 @@ router.get('/logout', function (req, res) {
 });
 
 router.get('/submit', function (req, res) {
+    if (req.session.entry.trustvalue == 0) {
+        return res.render('/user');
+    }
     return res.render('submit');
 })
 
@@ -153,5 +144,26 @@ router.post('/submit', function (req, res) {
         res.redirect('/user');
     }
 })
+
+
+router.get('/setupAuth', function (req, res) {
+    var formattedKey = authenticator.generateKey();
+    var uri = authenticator.generateTotpUri(formattedKey, req.session.user, "KYC IBM", 'SHA1', 6, 30);
+    var tag2 = QRCode.imageSync(uri, {type: 'svg', size: 10});
+
+    let entry = {
+        "qrkey": formattedKey
+    };
+    console.log(formattedKey);
+    req.session.entry["qrkey"] = formattedKey;
+
+    db.insert(req.session.entry, function (err, body) {
+        res.render('setupAuth', {
+            qr: tag2
+        })
+    });
+});
+
+
 
 module.exports = router;

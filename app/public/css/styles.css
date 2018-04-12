@@ -93,13 +93,6 @@ footer {
     padding-top: 1em;
 }
 
-/* #face {
-    
-    display: block;
-    margin: 0 auto;
-    margin-top: 30em;
-} */
-
 .header-face {
     text-align: center;
     padding-top: 1em;
@@ -116,4 +109,8 @@ footer {
     display: block;
     margin: auto auto;
     font-weight: 10 !important;
+}
+
+.navbar-brand {
+    padding-top: inherit;
 }
