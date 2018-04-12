@@ -60,6 +60,8 @@ router.post('/facerec', function(req, res) {
     console.log('testing image');
     var bestPrediction = face_rec2.predictIndividual(req.body.value);
     try {
+        console.log(bestPrediction);
+        console.log(req.session.user);
         if (bestPrediction === req.session.user) {
             req.session.time = Date.now();
             console.log('face matched');

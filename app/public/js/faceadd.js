@@ -31,7 +31,7 @@ window.onload = () => {
                 xhttp.send(reader.result);
             };
             reader.readAsDataURL(blob);
-            
+            alert('Successfully submitted Facial ID');
         })
         .catch(err => {
             console.log(err);

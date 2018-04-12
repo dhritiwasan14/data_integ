@@ -1,7 +1,12 @@
 #submit-btn {
-    background-color: #4053af !important; 
+    background-color: #4053af; 
     border-color: #4053af;
     color: white;
+}
+
+#submit-btn:hover {
+    background-color: transparent;
+    color: #4053af
 }
 
 #submit-button:focus {
