@@ -17,10 +17,7 @@ function sufficientlyTrusted(req, value) {
 
 // middleware
 router.use((req, res, next) => {
-    if (req.session.entry) {
-        console.log("Already got entry");
-        next();
-    } else if (req.session && req.session.user) {
+    if (req.session && req.session.user) {
         db.get(req.session.user, function (err, body, header) {
             if (err) {
                 res.redirect('/');
@@ -40,7 +37,7 @@ router.get('/facerec', function (req, res) {
     if (sufficientlyTrusted(req, 1)) {
         res.render('facerec', { 'message': '' });
     } else {
-        res.redirect('/');
+        res.redirect('/user/faceadd');
     }
 });
 
@@ -108,18 +105,7 @@ router.get('/profile', function (req, res) {
 })
 
 router.get('/', function (req, res) {
-    let value = req.session.entry.trustvalue;
-    let config = {
-        "document": "disabled"
-    };
-    console.log("Trust value is: " + value);
-    switch (value) {
-        case 2:
-        case 1:
-            config.document = "";
-    }
-
-    res.render('main', config);
+    res.render('main');
 });
 
 router.get('/logout', function (req, res) {

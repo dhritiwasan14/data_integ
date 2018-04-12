@@ -7,29 +7,30 @@
     </head>
     <body>
         <%- include("partials/nav"); %>
-        <form action="/user/facerec" method="post" id="loginform"></form>
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-auto">
-                    <h4>Align your face with the camera and click the submit button</h4>
+        <form action="/user/facerec" method="post" id="loginform">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-auto">
+                        <h4>Align your face with the camera and click the submit button</h4>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-auto">
+                        <video id="camdemo"></video>
+                    </div>
+                </div>
+                <div class = "row justify-content-center"> 
+                    <div class = "col-auto">
+                        <input type="text" name="value" id="value" hidden=true/>
+                        <input type="button" class="btn btn-lg" id="verify-btn face" value="Submit Facial-ID" />
+                    </div>
+                </div>
+                <div class= "row justify-content-center">
+                    <div class="col-auto text-danger">
+                        <span><%= message %></span>
+                    </div>
                 </div>
             </div>
-            <div class="row justify-content-center">
-                <div class="col-auto">
-                    <video id="camdemo"></video>
-                </div>
-            </div>
-            <div class = "row justify-content-center"> 
-                <div class = "col-auto">
-                    <input type="text" name="value" id="value" hidden=true/>
-                    <input type="button" class="btn btn-lg" id="verify-btn face" value="Submit Facial-ID" />
-                </div>
-            </div>
-            <div class= "row justify-content-center">
-                <div class="col-auto text-danger">
-                    <span><%= message %></span>
-                </div>
-            </div>
-        </div>
+        </form>
     </body>
 </html>

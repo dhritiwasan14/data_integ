@@ -26,6 +26,7 @@ window.onload = () => {
             reader.onloadend = (event) => {
                 var input = document.getElementById("value");
                 input.value = reader.result;
+                console.log(input.value);
                 form.submit();
             };
             reader.readAsDataURL(blob);
