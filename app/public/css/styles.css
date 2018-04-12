@@ -1,7 +1,12 @@
 #submit-btn {
-    background-color: #4053af !important; 
+    background-color: #4053af; 
     border-color: #4053af;
     color: white;
+}
+
+#submit-btn:hover {
+    background-color: transparent;
+    color: #4053af
 }
 
 #submit-button:focus {
@@ -88,13 +93,6 @@ footer {
     padding-top: 1em;
 }
 
-/* #face {
-    
-    display: block;
-    margin: 0 auto;
-    margin-top: 30em;
-} */
-
 .header-face {
     text-align: center;
     padding-top: 1em;
@@ -111,4 +109,8 @@ footer {
     display: block;
     margin: auto auto;
     font-weight: 10 !important;
+}
+
+.navbar-brand {
+    padding-top: inherit;
 }

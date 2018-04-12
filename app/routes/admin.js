@@ -44,7 +44,21 @@ router.get('/showUser/:id', function (req, res) {
 });
 
 router.post('/showUser/:id', function (req, res) {
-    console.log(req.body);
+    db.get(req.params.id, function (err, body, headers) {
+        if (!err) {
+            if (req.body === "accept") {
+                // increase trust value by 1
+                body.trustvalue+=1
+                db.insert(body, function(err, body, headers) {
+                    if(err) {
+                        console.log("update trust value process failed.")
+                    }
+                })
+            } 
+        } else {
+            console.log('an error has occurred.');
+        }
+    });
 });
 
 module.exports = router;

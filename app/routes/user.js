@@ -6,6 +6,8 @@ const db = require('../server/db').getDatabase();
 const fr = require('face-recognition');
 const path = require('path');
 const fs = require('fs');
+const authenticator = require('authenticator');
+const QRCode = require('qr-image');
 
 // helper functions
 function sufficientlyTrusted(req, value) {
@@ -125,6 +127,9 @@ router.get('/logout', function (req, res) {
 });
 
 router.get('/submit', function (req, res) {
+    if (req.session.entry.trustvalue == 0) {
+        return res.render('/user');
+    }
     return res.render('submit');
 })
 
@@ -139,5 +144,26 @@ router.post('/submit', function (req, res) {
         res.redirect('/user');
     }
 })
+
+
+router.get('/setupAuth', function (req, res) {
+    var formattedKey = authenticator.generateKey();
+    var uri = authenticator.generateTotpUri(formattedKey, req.session.user, "KYC IBM", 'SHA1', 6, 30);
+    var tag2 = QRCode.imageSync(uri, {type: 'svg', size: 10});
+
+    let entry = {
+        "qrkey": formattedKey
+    };
+    console.log(formattedKey);
+    req.session.entry["qrkey"] = formattedKey;
+
+    db.insert(req.session.entry, function (err, body) {
+        res.render('setupAuth', {
+            qr: tag2
+        })
+    });
+});
+
+
 
 module.exports = router;
