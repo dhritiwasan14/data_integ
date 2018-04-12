@@ -15,7 +15,7 @@
         <input type="button" class = "btn btn-lg" id="submit-btn face" value="Submit Facial-ID" />
         
         </form> -->
-        <form method="post" id = "loginform">
+        <form action="/user/facerec" method="post" id = "loginform">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-auto">
@@ -26,6 +26,11 @@
                 <div class = "col-md-auto">
                     <input type="text" name="value" id="value" hidden=true/>
                     <input type="button" class = "btn btn-lg" id="verify-btn face" value="Submit Facial-ID" />
+                </div>
+            </div>
+            <div class= "row justify-content-center">
+                <div class="col-md-auto text-danger">
+                    <span><%= message %></span>
                 </div>
             </div>
             </div>
