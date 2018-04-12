@@ -99,7 +99,7 @@ router.get('/profile', function (req, res) {
         if (err) {
             res.redirect('/');
         } else {
-            res.render('main', {
+            res.render('profile', {
                 entry: body
             });
         }
@@ -119,7 +119,7 @@ router.get('/', function (req, res) {
             config.document = "";
     }
 
-    res.render('profile', config);
+    res.render('main', config);
 });
 
 router.get('/logout', function (req, res) {

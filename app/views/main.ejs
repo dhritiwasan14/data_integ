@@ -1,52 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <%- include("partials/head"); %>
-        <%- include("partials/footer"); %>
-        <script src="/js/profile.js"></script>
-    </head>
-    <body>
-        <%-include("partials/nav"); %>
-        <div class="container mt-5">
-            <div class="row">
-                <div class="col-auto">
-                    <h2 class="header user-info">User Information:</h2>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    <hr class="header-hr">
-                </div>
-            </div>
-            <div class="row justify-content-center mt-5">
-                <div class="col-8">
-                    <table class="table table-hover"> 
-                        <tbody>
-                            <tr>
-                                <td style="border-top:hidden">Name:</td>
-                                <td style="border-top:hidden"><%= entry.name%></td>
-                            </tr>
-                            <tr>
-                                <td>Username:</td>
-                                <td><%= entry.username%></td>
-                            </tr>
-                            <tr>
-                                <td>Country:</td>
-                                <td><%= entry.country%></td>
-                            </tr>
-                            <tr>
-                                <td>Phone Number:</td>
-                                <td><%= entry.phone%></td>
-                            </tr>
-                            <tr>
-                                <td>Trust Value:</td>
-                                <td><%= entry.trustvalue%></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+<head>
+    <%- include("partials/head"); %>
+    <%- include("partials/footer"); %>
+</head>
+<body>
+    <%- include("partials/nav"); %>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-auto">
+                <img src="/images/damocles.png" class="damocles">
             </div>
         </div>
-        </div>
-    </body>
+    </div>
+</body>
 </html>
