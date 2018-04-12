@@ -17,7 +17,10 @@ function sufficientlyTrusted(req, value) {
 
 // middleware
 router.use((req, res, next) => {
-    if (req.session && req.session.user) {
+    if (req.session.entry) {
+        console.log("Already got entry");
+        next();
+    } else if (req.session && req.session.user) {
         db.get(req.session.user, function (err, body, header) {
             if (err) {
                 res.redirect('/');
@@ -44,20 +47,6 @@ router.get('/facerec', function (req, res) {
 router.get('/facerec/failed', function (req, res) {
     res.render('facerec', { 'message': 'An error has occurred. Please ensure there is only one face taken' });
 });
-
-
-router.get('/profile', function (req, res) {
-    db.get(req.session.user, function (err, body, header) {
-        if (err) {
-            res.redirect('/');
-        } else {
-            res.render('main', {
-                entry: body
-            });
-        }
-    })
-
-})
 
 
 router.post('/facerec', function (req, res) {
@@ -104,6 +93,19 @@ router.post('/faceadd', function (req, res) {
         });
     }
 });
+
+router.get('/profile', function (req, res) {
+    db.get(req.session.user, function (err, body, header) {
+        if (err) {
+            res.redirect('/');
+        } else {
+            res.render('main', {
+                entry: body
+            });
+        }
+    })
+
+})
 
 router.get('/', function (req, res) {
     let value = req.session.entry.trustvalue;
@@ -154,7 +156,6 @@ router.get('/setupAuth', function (req, res) {
     let entry = {
         "qrkey": formattedKey
     };
-    console.log(formattedKey);
     req.session.entry["qrkey"] = formattedKey;
 
     db.insert(req.session.entry, function (err, body) {
@@ -163,7 +164,5 @@ router.get('/setupAuth', function (req, res) {
         })
     });
 });
-
-
 
 module.exports = router;

@@ -37,6 +37,5 @@ $(document).ready(() => {
 
       $('input').val(canvas.toDataURL('image/jpeg', 1.0));
       $('form').submit();
-      alert('Documents have been successfully submitted.')
   });
 })

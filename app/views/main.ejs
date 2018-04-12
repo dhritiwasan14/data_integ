@@ -3,41 +3,50 @@
     <head>
         <%- include("partials/head"); %>
         <%- include("partials/footer"); %>
-        <link rel="stylesheet" href="/css/styles.css">
-        
         <script src="/js/profile.js"></script>
     </head>
     <body>
-        <div class = "user-info">
-            <h2 class = "header user-info">User Information:</h2>
-
-            <hr class = "header-hr">
-
-            <div class = "user block">
-                <table border="1" class = "table"> 
-                    <tr>
-                      <td>Name:</td>
-                      <td><%= entry.name%></td>
-                    </tr>
-                    <tr>
-                      <td>Username:</td>
-                      <td><%= entry.username%></td>
-                    </tr>
-                    <tr>
-                      <td>Country:</td>
-                      <td><%= entry.country%></td>
-                    </tr>
-                    <tr>
-                        <td>Phone Number:</td>
-                        <td><%= entry.phone%></td>
-                    </tr>
-                    <tr>
-                        <td>Trust Value:</td>
-                        <td><%= entry.trustvalue%></td>
-                    </tr>
-                  </table>
+        <%-include("partials/nav"); %>
+        <div class="container mt-5">
+            <div class="row">
+                <div class="col-auto">
+                    <h2 class="header user-info">User Information:</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <hr class="header-hr">
+                </div>
+            </div>
+            <div class="row justify-content-center mt-5">
+                <div class="col-8">
+                    <table class="table table-hover"> 
+                        <tbody>
+                            <tr>
+                                <td style="border-top:hidden">Name:</td>
+                                <td style="border-top:hidden"><%= entry.name%></td>
+                            </tr>
+                            <tr>
+                                <td>Username:</td>
+                                <td><%= entry.username%></td>
+                            </tr>
+                            <tr>
+                                <td>Country:</td>
+                                <td><%= entry.country%></td>
+                            </tr>
+                            <tr>
+                                <td>Phone Number:</td>
+                                <td><%= entry.phone%></td>
+                            </tr>
+                            <tr>
+                                <td>Trust Value:</td>
+                                <td><%= entry.trustvalue%></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
+        </div>
     </body>
-
 </html>
