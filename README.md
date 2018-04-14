@@ -57,7 +57,12 @@ http://localhost:3000
 
 ## Running the tests
 
+### Selenium Tests
 In the testing folder, there are java programs (running Selenium) that test the site.
+
+```
+$ cd data_integ/testing
+```
 
 **DamoclesSTest.java** test links on the dashboard
 
@@ -79,6 +84,30 @@ Once the java files are compiled, run the programs by using
 $ java <file-you-want-to-run>
 ```
 
+### Mocha Tests
+For the facial recognition part, we used Mocha test framework to test the functions that we are using.
+
+In order for these test to not interfere with our live database, we isolated and edited these test such that they run locally.
+
+```
+$ cd data_integ/testing/frtest
+$ npm install
+```
+
+To run the test, run
+```
+$ npm test
+```
+
+It runs the following test base on the files that we feed into the functions
+
+1) Predict with a valid face
+
+2) Predict with no face input (which results in error)
+
+3) Runs a test on training the model without any face (which results in error)
+
+4) Runs a test on training the model with a valid face
 
 ## Built With
 
@@ -89,6 +118,8 @@ $ java <file-you-want-to-run>
 * [bcrypt](https://www.npmjs.com/package/bcrypt) - hashing for data transfer
 * [express-session](https://www.npmjs.com/package/express-sessions)
 * [Nano](https://www.npmjs.com/package/nano) - Database functionality
+* [Mocha](https://mochajs.org/) - Testing framework
+* [Selenium](https://www.seleniumhq.org/) - Testing framework
 
 ## Authors
 
