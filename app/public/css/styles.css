@@ -16,6 +16,7 @@
     outline: none;
 }
 
+
 .rectangle {
     position: absolute;
     top: 10%;
@@ -67,31 +68,6 @@ body {
     margin-right: 15em;
 }
 
-.table {
-    width: 50em;
-    margin: 0 auto;
-    border: transparent;
-    margin-top: 5em;
-}
-
-.table td {
-    border-top: none;
-    border-bottom: 0.3px solid #dee2e6;
-}
-
-td {
-    padding: 2em;
-}
-
-footer {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    background-color: #f8f9fa!important;
-    text-align: center;
-    padding-top: 1em;
-}
-
 .header-face {
     text-align: center;
     padding-top: 1em;
@@ -116,4 +92,8 @@ footer {
 
 .user-info {
     padding-top: 0.5em;
+}
+
+footer {
+    background-color: #f8f9fa!important;
 }
