@@ -45,14 +45,20 @@ public class DamoclesRegistrationTest {
                 System.out.println("Try number: " + i);
                 Thread.sleep(2000);
                 WebElement user = driver.findElement(By.id("username"));
+                WebElement country = driver.findElement(By.id("country"));
+                WebElement phone = driver.findElement(By.id("phone"));
                 WebElement pass = driver.findElement(By.id("password"));
                 WebElement cpass = driver.findElement(By.id("confirmPassword"));
                 WebElement submitBtn = driver.findElement(By.className("btn"));
 
                 user.clear();
+                country.clear();
+                phone.clear();
                 pass.clear();
                 cpass.clear();
                 user.sendKeys(getSaltString());
+                country.sendKeys(getSaltString());
+                phone.sendKeys(getSaltString());
                 pass.sendKeys(getSaltString());
                 cpass.sendKeys(getSaltString());
                 submitBtn.click();
