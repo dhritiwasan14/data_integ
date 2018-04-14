@@ -1,59 +1,48 @@
 <!-- views/signup.ejs -->
 <!doctype html>
 <html>
-<head>
-    <title>Damocles Softwares KYC Register</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
-    <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> <!-- load bootstrap css -->
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> <!-- load fontawesome -->
-    <link rel="stylesheet" href="/css/styles.css">
-    <style>
-        body        { padding-top:80px; }
-    </style>
-    <%- include("partials/footer"); %>
-</head>
-<body>
-    <div class="container">
-        
-        <div class = "col-sm-6 col-sm-offset-3">
-            
-            <h1><span class="fa fa-sign-in"></span> Register </h1>
-            <div>
-                
-                <form method="post" action="/register">
-                    <div class="form-group">
-                        <label for="name">Name</label>
-                        <input type="text" class="form-control" id="name" name="name" placeholder="John Doe" required>
+    <head>
+        <%- include("partials/head"); %>
+        <%- include("partials/footer"); %>
+    </head>
+    <body>
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class = "col-sm-6">
+                    <h1><span class="fa fa-sign-in"></span> Register </h1>
+                    <div>
+                        <form method="post" action="/register">
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" class="form-control" id="name" name="name" placeholder="John Doe" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="country">Country</label>
+                                <input type="text" class="form-control" id="country" name="country" placeholder="Singapore" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone Number</label>
+                                <input type="number" class="form-control" id="phone" name="phone" placeholder="01234567" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="username">Username</label>
+                                <input type="text" class="form-control" id="username" name="username" placeholder="Username" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="confirmPassword">Confirm password</label>
+                                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Retype Password" required>
+                            </div>
+                            <p>Already have an account? <a href="/">Login</a></p>
+                            <button type="submit" class="btn btn-warning btn-lg" id="submit-btn">Sign In</button>
+                            <span><%= message %></span>
+                        </form>
                     </div>
-                    <div class="form-group">
-                        <label for="country">Country</label>
-                        <input type="text" class="form-control" id="country" name="country" placeholder="Singapore" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="phone">Phone Number</label>
-                        <input type="number" class="form-control" id="phone" name="phone" placeholder="01234567" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="username">Username</label>
-                        <input type="text" class="form-control" id="username" name="username" placeholder="Username" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="confirmPassword">Confirm password</label>
-                        <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Retype Password" required>
-                    </div>
-                    <p>Already have an account? <a href="/">Login</a></p>
-                    <button type="submit" class="btn btn-warning btn-lg" id="submit-btn">Sign In</button>
-                    <span><%= message %></span>
-                </form>
-                
+                </div>
             </div>
-            
         </div>
-    </div>
-</body>
+    </body>
 </html>

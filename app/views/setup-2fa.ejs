@@ -1,26 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
-        <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
-        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> <!-- load bootstrap css -->
-        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> <!-- load fontawesome -->
-        <link rel="stylesheet" href="/css/styles.css">
+        <%- include("partials/head"); %>
         <%- include("partials/footer"); %>
     </head>
     <body>
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-6 col-sm-offset-3">
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-sm-6">
                     <div class="bs-callout bs-callout-primary">
                         <h4>Connect Google Authenticator to your Account</h4>
                         <p>Scan QR code and press <strong>Save</strong> button.</p>
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-sm-6 col-sm-offset-3">
-
+            <div class="row justify-content-center">
+                <div class="col-sm-6">
                     <form method="post">
                         <div class="form-group">
                             <%- qr %>
