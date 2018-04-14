@@ -3,7 +3,6 @@ window.onload = () => {
     let verifyBtn = document.getElementById('verify-btn face');
     let form = document.getElementById('loginform');
     
-    
     let imageCapture;
     
     navigator.mediaDevices.getUserMedia({ video: true, audio: false, fps: 15 })
@@ -27,12 +26,8 @@ window.onload = () => {
             reader.onloadend = (event) => {
                 var input = document.getElementById("value");
                 input.value = reader.result;
-                
+                console.log(input.value);
                 form.submit();
-                /* let xhttp = new XMLHttpRequest();
-                xhttp.open("POST", "facerec", true);
-                xhttp.setRequestHeader("Content-type", "text/plain;charset=utf8");
-                xhttp.send(reader.result); */
             };
             reader.readAsDataURL(blob);
         })

@@ -1,33 +1,50 @@
-
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <%- include("partials/head"); %>
-    <%- include("partials/footer"); %>
-    <link rel="stylesheet" href="/css/styles.css">
-    
-    <script src="/js/profile.js"></script>
-</head>
-<body>
-    <!-- <div class="container profile-page">
-        <div class="row">
-            <div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4 logout-panel">
-                <a class="btn btn-default" href="/setup-2fa" role="button">Setup Google Authenticator</a>
-                <a class="btn btn-default" href="/user/faceadd" role="button">Add Facial Recognition</a>
-                <button class="btn btn-default" id="submitdocsbtn" type="button" <%= document %> >Submit documents</button>
-                <a class="btn btn-default" href="/user/logout" role="button">Logout</a>
+    <head>
+        <%- include("partials/head"); %>
+        <%- include("partials/footer"); %>
+    </head>
+    <body>
+        <%-include("partials/nav"); %>
+        <div class="container mt-5">
+            <div class="row">
+                <div class="col-auto">
+                    <h2 class="header user-info">User Information:</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <hr class="header-hr">
+                </div>
+            </div>
+            <div class="row justify-content-center mt-5">
+                <div class="col-8">
+                    <table class="table table-hover"> 
+                        <tbody>
+                            <tr>
+                                <td style="border-top:hidden">Name:</td>
+                                <td style="border-top:hidden"><%= entry.name%></td>
+                            </tr>
+                            <tr>
+                                <td>Username:</td>
+                                <td><%= entry.username%></td>
+                            </tr>
+                            <tr>
+                                <td>Country:</td>
+                                <td><%= entry.country%></td>
+                            </tr>
+                            <tr>
+                                <td>Phone Number:</td>
+                                <td><%= entry.phone%></td>
+                            </tr>
+                            <tr>
+                                <td>Trust Value:</td>
+                                <td><%= entry.trustvalue%></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-    </div> -->
-    
-    <!-- <div class="rectangle">
-        <h3 class = "rect-header"> Your Info: </h2>
-
-        <button type="submit" class="btn btn-warning btn-lg" id="submit-btn">Login</button>
-    </div> -->
-    <div class="image_padding"><img src="/images/damocles.png" class = "damocles"></div>
-    <!-- <button type="submit" class="btn btn-warning btn-lg" id="face-rec">Facial ID </button>
-    <button type="submit" class="btn btn-warning btn-lg" id="submit-doc">Documents</button>
-    <button type="submit" class="btn btn-warning btn-lg" id="google-auth">Google Auth</button> -->
-</body>
+    </body>
 </html>

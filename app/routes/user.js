@@ -37,27 +37,13 @@ router.get('/facerec', function (req, res) {
     if (sufficientlyTrusted(req, 1)) {
         res.render('facerec', { 'message': '' });
     } else {
-        res.redirect('/');
+        res.redirect('/user/faceadd');
     }
 });
 
 router.get('/facerec/failed', function (req, res) {
     res.render('facerec', { 'message': 'An error has occurred. Please ensure there is only one face taken' });
 });
-
-
-router.get('/profile', function (req, res) {
-    db.get(req.session.user, function (err, body, header) {
-        if (err) {
-            res.redirect('/');
-        } else {
-            res.render('main', {
-                entry: body
-            });
-        }
-    })
-
-})
 
 
 router.post('/facerec', function (req, res) {
@@ -105,19 +91,21 @@ router.post('/faceadd', function (req, res) {
     }
 });
 
-router.get('/', function (req, res) {
-    let value = req.session.entry.trustvalue;
-    let config = {
-        "document": "disabled"
-    };
-    console.log("Trust value is: " + value);
-    switch (value) {
-        case 2:
-        case 1:
-            config.document = "";
-    }
+router.get('/profile', function (req, res) {
+    db.get(req.session.user, function (err, body, header) {
+        if (err) {
+            res.redirect('/');
+        } else {
+            res.render('profile', {
+                entry: body
+            });
+        }
+    })
 
-    res.render('profile', config);
+})
+
+router.get('/', function (req, res) {
+    res.render('main');
 });
 
 router.get('/logout', function (req, res) {
@@ -154,7 +142,6 @@ router.get('/setupAuth', function (req, res) {
     let entry = {
         "qrkey": formattedKey
     };
-    console.log(formattedKey);
     req.session.entry["qrkey"] = formattedKey;
 
     db.insert(req.session.entry, function (err, body) {
@@ -163,7 +150,5 @@ router.get('/setupAuth', function (req, res) {
         })
     });
 });
-
-
 
 module.exports = router;

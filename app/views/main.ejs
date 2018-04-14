@@ -1,43 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <%- include("partials/head"); %>
-        <%- include("partials/footer"); %>
-        <link rel="stylesheet" href="/css/styles.css">
-        
-        <script src="/js/profile.js"></script>
-    </head>
-    <body>
-        <div class = "user-info">
-            <h2 class = "header user-info">User Information:</h2>
-
-            <hr class = "header-hr">
-
-            <div class = "user block">
-                <table border="1" class = "table"> 
-                    <tr>
-                      <td>Name:</td>
-                      <td><%= entry.name%></td>
-                    </tr>
-                    <tr>
-                      <td>Username:</td>
-                      <td><%= entry.username%></td>
-                    </tr>
-                    <tr>
-                      <td>Country:</td>
-                      <td><%= entry.country%></td>
-                    </tr>
-                    <tr>
-                        <td>Phone Number:</td>
-                        <td><%= entry.phone%></td>
-                    </tr>
-                    <tr>
-                        <td>Trust Value:</td>
-                        <td><%= entry.trustvalue%></td>
-                    </tr>
-                  </table>
+<head>
+    <%- include("partials/head"); %>
+    <%- include("partials/footer"); %>
+</head>
+<body>
+    <%- include("partials/nav"); %>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-auto">
+                <img src="/images/damocles.png" class="damocles">
             </div>
         </div>
-    </body>
-
+    </div>
+</body>
 </html>
