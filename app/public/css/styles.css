@@ -114,3 +114,7 @@ footer {
 .navbar-brand {
     padding-top: inherit;
 }
+
+.user-info {
+    padding-top: 0.5em;
+}
