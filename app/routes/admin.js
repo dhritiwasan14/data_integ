@@ -35,7 +35,8 @@ router.get('/showUser/:id', function (req, res) {
                 country: body.country, 
                 phone: body.phone, 
                 trustvalue: body.trustvalue, 
-                document: body.document
+                document: body.document, 
+                face: body.face
             })
         } else {
             console.log('encountered an error'+err);
