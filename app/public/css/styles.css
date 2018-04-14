@@ -87,7 +87,6 @@ td {
     position: fixed;
     bottom: 0;
     width: 100%;
-    height: 15%;
     background-color: #f8f9fa!important;
     text-align: center;
     padding-top: 1em;
@@ -113,4 +112,8 @@ td {
 
 .navbar-brand {
     padding-top: inherit;
+}
+
+.user-info {
+    padding-top: 0.5em;
 }

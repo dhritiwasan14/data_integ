@@ -6,29 +6,29 @@
 </head>
 <body>
         <h2 class = "header user-info"><%= name %></h2>
-        
+        <div class="table-div">
+            <table class = "table" id="individual">
+                <tr>
+                    <td>Username:</td>
+                    <td><%= username %></td>
+                </tr>
+                <tr>
+                    <td>Country:</td>
+                    <td><%= country %></td>
+                </tr>
+                <tr>
+                    <td>Phone Number:</td>
+                    <td><%= phone %></td>
+                </tr>
+                <tr>
+                    <td>Trust Value:</td>
+                    <td><%= trustvalue %></td>
+                </tr>
+            </table>
+        </div>
         <hr class = "header-hr">
         <div class="info_container">
-            <div class="table-div">
-                <table class = "table" id="individual">
-                    <tr>
-                        <td>Username:</td>
-                        <td><%= username %></td>
-                    </tr>
-                    <tr>
-                        <td>Country:</td>
-                        <td><%= country %></td>
-                    </tr>
-                    <tr>
-                        <td>Phone Number:</td>
-                        <td><%= phone %></td>
-                    </tr>
-                    <tr>
-                        <td>Trust Value:</td>
-                        <td><%= trustvalue %></td>
-                    </tr>
-                </table>
-            </div>
+            
             <div class="img-div">
                 <img src="<%= document %>"></img>
             </div>
@@ -74,4 +74,8 @@
         text-align: center;
         margin-top: 2em;
     }
+    .header user-info {
+
+    }
+
 </style>
