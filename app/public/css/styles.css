@@ -83,7 +83,7 @@ td {
     padding: 2em;
 }
 
-footer {
+/* footer {
     position: fixed;
     bottom: 0;
     width: 100%;
@@ -91,7 +91,7 @@ footer {
     background-color: #f8f9fa!important;
     text-align: center;
     padding-top: 1em;
-}
+} */
 
 .header-face {
     text-align: center;
