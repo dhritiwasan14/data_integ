@@ -1,31 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-        <% include partials/head.1.ejs %>
+    <head>
         <%- include("partials/footer"); %>
-</head>
-<body>
+        <%- include("partials/nav"); %>
+    </head>
+    <body>
         <div class="container">
-                <div class="row">
-                    <div class="col-sm-6 col-sm-offset-3">
-                        <div class="bs-callout bs-callout-primary">
-                            <h4>Connect Google Authenticator to your Account</h4>
-                            <p>Scan QR code and press <strong>Save</strong> button.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-6 col-sm-offset-3">
-                        
-                        <form method="post">
-                            <div class="form-group">
-                                <%- qr %>
-                            </div>
-                            <a href="/"><button type="button" class="btn btn-lg">Continue</button></a>
-                        </form>
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3">
+                    <div class="bs-callout bs-callout-primary">
+                        <h4>Connect Google Authenticator to your Account</h4>
+                        <p>Scan QR code and press <strong>Save</strong> button.</p>
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3">
 
-</body>
+                    <form method="post">
+                        <div class="form-group">
+                            <%- qr %>
+                        </div>
+                        <a href="/"><button type="button" class="btn btn-lg">Continue</button></a>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </body>
 </html>
