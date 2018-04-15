@@ -23,7 +23,7 @@
                     <tbody>
                         <tr style="border-top:hidden">
                             <td>Username:</td>
-                            <td><%= username %></td>
+                            <td class = "username"><%= username %></td>
                             <td>Country:</td>
                             <td><%= country %></td>
                         </tr>
@@ -47,12 +47,13 @@
         </div>
         <div class="row justify-content-center">
             <div class="col-auto">
-                <button type="button" class="btn btn-lg" id="submit-btn" onclick="accept">Accept</button>
+                <button type="button" class="btn btn-lg" id="submit-btn" onclick="accept()">Accept</button>
             </div>
             <div class="col-auto">
-                <button type="button" class="btn btn-lg" id="submit-btn" onclick="reject">Reject</button>
+                <button type="button" class="btn btn-lg" id="submit-btn" onclick="reject()">Reject</button>
             </div>
         </div>
     </div>
 </body>
+<script src="/js/display_user.js"></script>
 </html>

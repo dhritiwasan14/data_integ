@@ -3,13 +3,12 @@ const db = require('../server/db').getDatabase();
 
 
 router.get('/adminprofile', function(req, res) {
-    console.log(req.session.isadmin);
-    console.log(req.session.user);
-    // if ((req.session.isadmin == false || req.session.isadmin == undefined) && (req.session.user != null || req.session.user == undefined)) {
-    //     return res.redirect('/');
-    // } else if (req.session.isadmin == false) {
-    //     return res.redirect('/login');
-    // }
+    
+    if ((req.session.isadmin == false || req.session.isadmin == undefined) && (req.session.user != null || req.session.user == undefined)) {
+        return res.redirect('/');
+    } else if (req.session.isadmin == false) {
+        return res.redirect('/login');
+    }
     var users = [];
     db.list(function(errnew, bodynew) {
         var users = [];
@@ -45,7 +44,9 @@ router.get('/showUser/:id', function (req, res) {
 });
 
 router.post('/showUser/:id', function (req, res) {
+    console.log(req.params.id);
     db.get(req.params.id, function (err, body, headers) {
+        console.log(req.body);
         if (!err) {
             if (req.body === "accept") {
                 // increase trust value by 1
@@ -57,7 +58,7 @@ router.post('/showUser/:id', function (req, res) {
                 })
             } 
         } else {
-            console.log('an error has occurred.');
+            console.log('an error has occurred.'+err);
         }
     });
 });
