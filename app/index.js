@@ -43,8 +43,13 @@ app.get('/', function(req, res) {
 
 app.get('/:status(login|failed)', function(req, res) {
     if (req.session.user) {
-        res.redirect('/user');
-        return;
+        if (!req.session.isadmin) {
+            res.redirect('/user');
+            return;
+        } else {
+            res.redirect('/admin/adminprofile');
+            return;
+        }
     }
 
     let config = {
@@ -60,7 +65,7 @@ app.post('/', function(req, res) {
     console.log('Login attempt');
     db.get(req.body.username, function (err, body, headers) {
         let authenticated = false;
-        let tokenMatch = false;
+        let tokenMatch = true;
         let isAdmin = false;
 
         // username check
