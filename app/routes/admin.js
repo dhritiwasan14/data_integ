@@ -1,6 +1,14 @@
 const router = require('express').Router();
 const db = require('../server/db').getDatabase();
 
+// middleware
+router.use((req, res, next) => {
+    if (req.session && req.session.user && req.session.isadmin) {
+        next();
+    } else {
+        res.redirect('/');
+    }
+});
 
 router.get('/adminprofile', function(req, res) {
     
