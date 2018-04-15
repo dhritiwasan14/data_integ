@@ -28,6 +28,13 @@ router.get('/showUser/:id', function (req, res) {
     console.log(req.params.id);
     db.get(req.params.id, function (err, body, headers) {
         if (!err) {
+            let disabled;
+            if (body.trustvalue >= 2) {
+                disabled = 'disabled';
+            } else {
+                disabled = '';
+            }
+
             return res.render('display_user', {
                 name: body.name, 
                 username: body.username, 
@@ -35,7 +42,8 @@ router.get('/showUser/:id', function (req, res) {
                 phone: body.phone, 
                 trustvalue: body.trustvalue, 
                 document: body.document, 
-                face: body.face
+                face: body.face,
+                'disabled': disabled
             })
         } else {
             console.log('encountered an error'+err);
@@ -50,7 +58,7 @@ router.post('/showUser/:id', function (req, res) {
         if (!err) {
             if (req.body === "accept") {
                 // increase trust value by 1
-                body.trustvalue+=1
+                body.trustvalue = 2;
                 db.insert(body, function(err, body, headers) {
                     if(err) {
                         console.log("update trust value process failed.")

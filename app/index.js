@@ -65,7 +65,7 @@ app.post('/', function(req, res) {
     console.log('Login attempt');
     db.get(req.body.username, function (err, body, headers) {
         let authenticated = false;
-        let tokenMatch = true;
+        let tokenMatch = false;
         let isAdmin = false;
 
         // username check

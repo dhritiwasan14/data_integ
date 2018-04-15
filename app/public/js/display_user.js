@@ -6,6 +6,7 @@ function accept() {
     xhttp.open("POST", "/admin/showUser/"+username, true);
     xhttp.setRequestHeader("Content-type", "text/plain;charset=utf8");
     xhttp.send("accept");
+    window.location.href = '/admin/adminprofile';
 }
 
 function reject() {
@@ -13,5 +14,6 @@ function reject() {
     xhttp.open("POST", "/admin/showUser/"+username, true);
     xhttp.setRequestHeader("Content-type", "text/plain;charset=utf8");
     xhttp.send("reject");
+    window.location.href = '/admin/adminprofile';
 }
 
