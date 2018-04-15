@@ -56,17 +56,12 @@ body {
     outline: none !important;
 }
 
-.header {
+/* .header {
     text-align: left;
     margin-left: 10em;
     padding-top: 2em;
     
-}
-
-.header-hr {
-    margin-left: 15em;
-    margin-right: 15em;
-}
+} */
 
 .header-face {
     text-align: center;
@@ -90,9 +85,9 @@ body {
     padding-top: inherit;
 }
 
-.user-info {
+/* .user-info {
     padding-top: 0.5em;
-}
+} */
 
 footer {
     background-color: #f8f9fa!important;
