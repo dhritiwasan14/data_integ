@@ -5,6 +5,7 @@
         <%- include("partials/footer"); %>
 </head>
 <body>
+        
         <div class="container">
                 <div class="row">
                     <div class="col-sm-6 col-sm-offset-3">
@@ -21,11 +22,13 @@
                             <div class="form-group">
                                 <%- qr %>
                             </div>
-                            <a href="/"><button type="button" class="btn btn-lg">Continue</button></a>
+                            <input type="hidden" value="<%= key %>" name="newQR"/>
+                            <button type="submit" class="btn btn-lg">Continue</button>
                         </form>
                     </div>
                 </div>
             </div>
 
 </body>
+
 </html>

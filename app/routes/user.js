@@ -135,20 +135,27 @@ router.post('/submit', function (req, res) {
 
 
 router.get('/setupAuth', function (req, res) {
+    
     var formattedKey = authenticator.generateKey();
     var uri = authenticator.generateTotpUri(formattedKey, req.session.user, "KYC IBM", 'SHA1', 6, 30);
     var tag2 = QRCode.imageSync(uri, {type: 'svg', size: 10});
-
-    let entry = {
-        "qrkey": formattedKey
-    };
-    req.session.entry["qrkey"] = formattedKey;
-
-    db.insert(req.session.entry, function (err, body) {
-        res.render('setupAuth', {
-            qr: tag2
-        })
+    res.render('setupAuth', {
+        qr: tag2, 
+        key: formattedKey
     });
 });
 
+
+router.post('/setupAuth', function(req, res) {
+    console.log(req.body);
+    console.log("OLD is "+req.session.entry["qrkey"]);
+    req.session.entry["qrkey"] = req.body.newQR;
+    console.log("NEW is "+req.session.entry["qrkey"]);
+    db.insert(req.session.entry, function (err, body) {
+        if (err) {
+            console.log('hit an error');
+        }
+    });
+    res.render('main');
+});
 module.exports = router;
