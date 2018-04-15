@@ -14,4 +14,3 @@ function reject() {
     xhttp.setRequestHeader("Content-type", "text/plain;charset=utf8");
     xhttp.send("reject");
 }
-

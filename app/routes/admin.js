@@ -25,7 +25,13 @@ router.get('/adminprofile', function(req, res) {
 });
 
 router.get('/showUser/:id', function (req, res) {
+    if ((req.session.isadmin == false || req.session.isadmin == undefined) && (req.session.user != null || req.session.user == undefined)) {
+        return res.redirect('/');
+    } else if (req.session.isadmin == false) {
+        return res.redirect('/login');
+    }
     console.log(req.params.id);
+
     db.get(req.params.id, function (err, body, headers) {
         if (!err) {
             return res.render('display_user', {
@@ -50,7 +56,9 @@ router.post('/showUser/:id', function (req, res) {
         if (!err) {
             if (req.body === "accept") {
                 // increase trust value by 1
-                body.trustvalue+=1
+                if (body.trustvalue < 2) {
+                    body.trustvalue+=1;
+                }
                 db.insert(body, function(err, body, headers) {
                     if(err) {
                         console.log("update trust value process failed.")
@@ -61,6 +69,7 @@ router.post('/showUser/:id', function (req, res) {
             console.log('an error has occurred.'+err);
         }
     });
+    return res.redirect('/showUser/'+req.params.id);
 });
 
 module.exports = router;
