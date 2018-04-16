@@ -31,18 +31,29 @@ router.use((req, res, next) => {
     }
 });
 
+let config = {};
+router.use((req, res, next) => {
+    if (req.session.entry.trustvalue >= 1) {
+        config.vdTrue = 1;
+    } else {
+        config.vdTrue = 0;
+    }
+    next();
+});
 
 // routes
 router.get('/facerec', function (req, res) {
     if (sufficientlyTrusted(req, 1)) {
-        res.render('facerec', { 'message': '' });
+        config.message = '';
+        res.render('facerec', config);
     } else {
         res.redirect('/user/faceadd');
     }
 });
 
 router.get('/facerec/failed', function (req, res) {
-    res.render('facerec', { 'message': 'An error has occurred. Please ensure there is only one face taken' });
+    config.message = 'An error has occurred. Please ensure there is only one face taken'; 
+    res.render('facerec', config);
 });
 
 
@@ -69,11 +80,13 @@ router.post('/facerec', function (req, res) {
 });
 
 router.get('/faceadd', function (req, res) {
-    res.render('faceadd', { 'message': '' });
+    config.message = '';
+    res.render('faceadd', config);
 });
 
 router.get('/faceadd/failed', function (req, res) {
-    res.render('faceadd', { 'message': 'No face/multiple faces detected, please try again' });
+    config.message = 'No face/multiple faces detected, please try again'
+    res.render('faceadd', config);
 });
 
 router.post('/faceadd', function (req, res) {
@@ -96,16 +109,15 @@ router.get('/profile', function (req, res) {
         if (err) {
             res.redirect('/');
         } else {
-            res.render('profile', {
-                entry: body
-            });
+            config.entry = body;
+            res.render('profile', config);
         }
     })
 
 })
 
 router.get('/', function (req, res) {
-    res.render('main');
+    res.render('main', config);
 });
 
 router.get('/logout', function (req, res) {
@@ -116,33 +128,38 @@ router.get('/logout', function (req, res) {
 
 router.get('/submit', function (req, res) {
     if (req.session.entry.trustvalue == 0) {
-        return res.render('/user');
+        return res.render('/user', config);
     }
-    return res.render('submit');
+    return res.render('submit', config);
 })
 
 router.post('/submit', function (req, res) {
     let timeElapsed = Date.now() - req.session.time;
+    console.log(timeElapsed);
     if (timeElapsed < 1000 * 60 * 3) { // time limit of 3 minutes
         req.session.entry['document'] = req.body.image;
+
         db.insert(req.session.entry, function (err, body) {
-            res.redirect('/user');
+            if (err) {
+                console.log('an error occurred');
+            } else {
+                res.redirect('/user');
+            }
         });
     } else {
         res.redirect('/user');
     }
 })
 
-
 router.get('/setupAuth', function (req, res) {
     
     var formattedKey = authenticator.generateKey();
     var uri = authenticator.generateTotpUri(formattedKey, req.session.user, "KYC IBM", 'SHA1', 6, 30);
     var tag2 = QRCode.imageSync(uri, {type: 'svg', size: 10});
-    res.render('setupAuth', {
-        qr: tag2, 
-        key: formattedKey
-    });
+
+    config.qr = tag2;
+    config.key = formattedKey;
+    res.render('setupAuth', config);
 });
 
 
@@ -156,6 +173,6 @@ router.post('/setupAuth', function(req, res) {
             console.log('hit an error');
         }
     });
-    res.render('main');
+    res.redirect('/user');
 });
 module.exports = router;

@@ -35,7 +35,7 @@ $(document).ready(() => {
         canvas.width = webcam.videoWidth;
         canvas.getContext('2d').drawImage(webcam, 0, 0, canvas.width, canvas.height);
 
-        $('input').val(canvas.toDataURL('image/jpeg', 1.0));
+        $('input').val(canvas.toDataURL('image/jpeg', 0.7));
         $('form').submit();
         $('.overlay').show();
     });

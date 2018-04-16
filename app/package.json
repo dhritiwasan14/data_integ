@@ -22,6 +22,7 @@
     "express-session": "^1.15.6",
     "face-recognition": "^0.8.1",
     "fs": "0.0.1-security",
+    "mocha": "^5.1.0",
     "nano": "^6.4.3",
     "opencv4nodejs": "^4.1.0",
     "path": "^0.12.7",

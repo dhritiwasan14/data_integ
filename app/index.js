@@ -65,7 +65,7 @@ app.post('/', function(req, res) {
     console.log('Login attempt');
     db.get(req.body.username, function (err, body, headers) {
         let authenticated = false;
-        let tokenMatch = true;
+        let tokenMatch = false;
         let isAdmin = false;
 
         // username check
@@ -171,7 +171,8 @@ app.post('/register', function(req, res) {
             "trustvalue": 0, 
             "country":req.body.country, 
             "phone": req.body.phone, 
-            "name": req.body.name
+            "name": req.body.name, 
+            "approved": false
         };
         db.insert(entry, username, function (err, body, headers) {
             if (!err) {
