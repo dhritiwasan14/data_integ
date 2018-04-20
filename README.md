@@ -35,19 +35,17 @@ $ npm install npm@latest -g
 * Install the following external libraries
 
 **Linux and OSX**
-
+```
 cmake
-
 libx11 (XQuartz on OSX) for the dlib GUI (sudo apt-get install libx11-dev)
-
 libpng for reading images (sudo apt-get install libpng-dev)
+```
 
 **Windows**
-
+```
 cmake
-
 VS2017 build tools (not Visual Studio 2017) -> https://www.visualstudio.com/de/downloads/
-
+```
 ### Installation
 Run the following on terminal
 
